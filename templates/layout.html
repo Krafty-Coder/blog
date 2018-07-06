@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>MyFlaskApp</title>
+    <link href='static/css/style.css' rel="stylesheet" type='text/css'>
+    <link href='static/css/bootstrap.min.css' rel="stylesheet" type='text/css'>
+  </head>
+  <body>
+    {% include 'includes/_messages.html' %}
+    {% include 'includes/_navbar.html' %}
+    {% block body %}{% endblock %}
+  <script src="static/js/myscript.js"></script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+<header>
+  <h1>picture</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="http://kraftycoder.ml">Portfolio</a>
+    <a href="http://kraftycoder.ml#skills">Services</a>
+    <a href="/articles">Articles</a>
+    <a href="/register">Register</a>
+  </nav>
+</header>
+<script>
+  $(function() {
+    $(window).scroll(function() {
+      var winTop = $(window).scrollTop();
+      if (winTop >= 30) {
+        $("header").addClass("sticky-header");
+
+      } else {
+        $("header").removeClass("sticky-header");
+
+      }
+
+    })
+
+  })
+</script>
