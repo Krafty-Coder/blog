@@ -1,5 +1,4 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
-from data import Articles
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
@@ -17,8 +16,6 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 # Init MYSQL
 mysql = MySQL(app)
 
-Articles = Articles()
-
 
 @app.route('/')
 def index():
@@ -32,12 +29,24 @@ def about():
 
 @app.route('/articles')
 def articles():
-    return render_template('articles.html', articles=Articles)
+    cur = mysql.connection.cursor()
+
+    result = cur.execute("SELECT * FROM articles")
+
+    articles = cur.fetchall()
+
+    cur.close()
+
+    if result > 0:
+        return render_template('articles.html', articles=articles)
+    else:
+        msg = 'No article found, please add article to view them here'
+        return render_template('articles.html', msg=msg)
 
 
-# @app.route('/article/<string:id>/')
-# def article(id):
-#     return render_template('article.html', id=id)
+@app.route('/article/<string:id>/')
+def article(id):
+    return render_template('article.html', id=id)
 
 
 class RegisterForm(Form):
@@ -143,7 +152,19 @@ def logout():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
-    return render_template('dashboard.html')
+    cur = mysql.connection.cursor()
+
+    result = cur.execute("SELECT * FROM articles")
+
+    articles = cur.fetchall()
+
+    cur.close()
+
+    if result > 0:
+        return render_template('dashboard.html', articles=articles)
+    else:
+        msg = 'No article found, please add article to view them here'
+        return render_template('dashboard.html', msg=msg)
 
 
 class ArticleForm(Form):
