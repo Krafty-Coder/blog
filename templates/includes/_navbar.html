@@ -1,5 +1,5 @@
 <header>
-  <h1>picture</h1>
+  <h1></h1>
   <nav>
     <a href="/">Home</a>
     <a href="/about">About</a>
@@ -15,19 +15,5 @@
     {% endif %}
   </nav>
 </header>
-<script>
-  $(function() {
-    $(window).scroll(function() {
-      var winTop = $(window).scrollTop();
-      if (winTop >= 30) {
-        $("header").addClass("sticky-header");
 
-      } else {
-        $("header").removeClass("sticky-header");
 
-      }
-
-    })
-
-  })
-</script>
