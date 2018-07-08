@@ -1,8 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-
-<h1>{{id}}</h1>
-
+  <h1>{{article.title}}</h1>
+  <small>Written by {{article.author}} on {{article.create_date}}</small>
+  <hr>
+  <div class="container">
+      <p>{{article.body | safe }}</p> <!-- The "| safe"  is for ejecting any rogue html tag like the <p>-->
+  </div>
 {% endblock %}
+
 
