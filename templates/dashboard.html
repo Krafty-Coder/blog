@@ -4,4 +4,24 @@
   <h1>Dashboard <small> Welcome {{session.username}}</small></h1>
   <a class="btn btn-success" href="/add_article"> Add Article</a>
   <hr>
+  <table class="table table-stripped">
+    <tr>
+      <th>ID</th>
+      <th>TITLE</th>
+      <th>AUTHOR</th>
+      <th>DATE</th>
+      <th></th>
+      <th></th>
+    </tr>
+    {% for article in articles%}
+      <tr>
+        <td>{{article.id}}</td>
+        <td>{{article.title}}</td>
+        <td>{{article.author}}</td>
+        <td>{{article.date}}</td>
+        <td><a href="edit_article/{{article.id}}" class="btn btn-default pull-right">Edit</a> </td>
+        <td><a href="" class="btn btn-danger">Delete</a</td>
+      </tr>
+    {% endfor %}
+  </table>
 {% endblock %}
