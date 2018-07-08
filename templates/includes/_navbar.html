@@ -6,7 +6,13 @@
     <a href="http://kraftycoder.ml">Portfolio</a>
     <a href="http://kraftycoder.ml#skills">Services</a>
     <a href="/articles">Articles</a>
+    {% if session.logged_in %}
+    <a href="/dashboard">Dashboard</a>
+    <a href="/logout">Logout</a>
+    {% else %}
     <a href="/register">Register</a>
+    <a href="/login">Login</a>
+    {% endif %}
   </nav>
 </header>
 <script>
