@@ -125,6 +125,20 @@ def is_logged_in(f):
     return wrap
 
 
+# Logout
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You have successfully logged out', 'success')
+    return redirect(url_for('login'))
+
+
+# Dashboard
+@app.route('/dashboard')
+@is_logged_in
+def dashboard():
+    return render_template('dashboard.html')
+
 
 if __name__ == '__main__':
     app.secret_key='secret_key_219641456888_krafty'
