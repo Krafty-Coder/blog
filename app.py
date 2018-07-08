@@ -3,6 +3,7 @@ from data import Articles
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -111,6 +112,19 @@ def login():
             return render_template('login.html', error=error)
 
     return render_template('login.html')
+
+# Check for user logged in
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorised, Please log in to continue to this page', 'danger')
+            return redirect(url_for('login'))
+    return wrap
+
+
 
 if __name__ == '__main__':
     app.secret_key='secret_key_219641456888_krafty'
