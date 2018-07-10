@@ -206,6 +206,55 @@ def add_article():
     return render_template('add_article.html', form=form)
 
 
+@app.route('/edit_article/<string:id>', methods=['GET', 'POST'])
+@is_logged_in
+def edit_article(id):
+    cur = mysql.connection.cursor()
+
+    result = cur.execute("SELECT * FROM articles WHERE id = {}".format(id))
+
+    article = cur.fetchone()
+
+    form = ArticleForm(request.form)
+
+    form,title.data = article['title']
+    form.body.data = article['body']
+
+    if request.method == 'POST' and form.validate():
+        title = request.form['title']
+        body = request.form['body']
+
+        # Create cursor
+        cursor = mysql.connection.cursor()
+
+        cursor.execute("UPDATE articles SET title={}, body={} WHERE id={}".format(title, body, id))
+
+        # Commit to DB
+        mysql.connection.commit()
+
+        # close connection
+        cursor.close()
+
+        flash('Article Updated successfully', 'success')
+        return redirect(url_for('dashboard'))
+
+    return render_template('add_article.html', form=form)
+
+
+@app.route('/delete_article', methods=['POST'])
+@is_logged_in
+def delete_article(id):
+    cur = mysql.connection.cursor()
+
+    result = cur.execute("DELETE FROM articles WHERE id = {}".format(id))
+
+    mysql.connection.commit()
+
+    cur.close()
+
+
+
+
 if __name__ == '__main__':
     app.secret_key = 'secret_key_219641456885_krafty'
     app.run(debug=True)
