@@ -47,15 +47,10 @@ def articles():
 @app.route('/article/<string:id>/')
 def article(id):
     cur = mysql.connection.cursor()
-
-    cur.execute("SELECT * FROM articles WHERE id = {}".format(int(id)))
-
+    cur.execute("SELECT * FROM articles WHERE id = %s".format(int(id)))
     article = cur.fetchone()
-
     cur.close()
-
     return render_template('article.html', article=article)
-
 
 class RegisterForm(Form):
     name = StringField(u'Name', validators=[validators.input_required()])
