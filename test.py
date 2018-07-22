@@ -54,6 +54,15 @@ class FlaskTestCase(unittest.TestCase):
         response = tester.get('/login', follow_redirects=True)
         self.assertTrue(b'Unauthorised, Please log in to continue to this page', response.data)
 
+    # Show articles on the main page
+    def test_articles_display_on_dashboard(self):
+        tester = app.test_client(self)
+        response = tester.post(
+            '/login',
+            data=dict(username="admin", password="admin"),
+            follow_redirects=True
+        )
+        self.assertIn(b'Dashboard Welcome admin', response.data)
 
 
 if __name__ == '__main__':
