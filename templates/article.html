@@ -3,10 +3,10 @@
 {% block body %}
 
 <div class="container-fluid">
-  <h1>{{item.title}}</h1>
-  <small>Written by {{item.stockist}} on {{item.create_date}}</small>
+  <h1>{{article.title}}</h1>
+  <small>Written by {{article.author}} on {{article.create_date}}</small>
   <hr>
-  <p>{{ item.description }}</p>
+  <p>{{ article.description }}</p>
 </div>
 
 {% endblock %}
