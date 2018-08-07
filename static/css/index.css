@@ -1,0 +1,19 @@
+.image {
+}
+img {
+  width: 100%;
+  height: 60vh;
+}
+.align-center {
+  text-align: center;
+}
+.align-center a {
+  background-color: #0100fa;
+  color: #fff;
+  margin: 1em 1em;
+}
+
+align-center a:hover {
+  color: black;
+  font-weight: 900;
+}

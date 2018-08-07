@@ -19,7 +19,15 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    cur = mysql.connection.cursor()
+
+    result = cur.execute("SELECT * FROM articles")
+
+    articles = cur.fetchall()
+
+    cur.close()
+
+    return render_template('index.html', articles=articles)
 
 
 @app.route('/about')
@@ -47,9 +55,9 @@ def articles():
 @app.route('/article/<string:id>/')
 def article(id):
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM articles WHERE id = %s".format(int(id)))
+    cur.execute("SELECT * FROM articles WHERE id ={}".format(id))
     article = cur.fetchone()
-    cur.close()
+    # cur.close(
     return render_template('article.html', article=article)
 
 class RegisterForm(Form):
@@ -110,6 +118,7 @@ def login():
             password = data['password']
 
             # Compare Passwords
+            cur.close()
             if sha256_crypt.verify(password_candidate, password):
                 # Password and username matches
                 session['logged_in'] = True
@@ -122,7 +131,6 @@ def login():
                 error = 'Password or username incorrect, Invalid login'
                 return render_template('login.html', error=error)
             # close connection
-            cur.close()
         else:
             error = "Username not found"
             return render_template('login.html', error=error)
@@ -212,7 +220,7 @@ def edit_article(id):
 
     form = ArticleForm(request.form)
 
-    form,title.data = article['title']
+    form.title.data = article['title']
     form.body.data = article['body']
 
     if request.method == 'POST' and form.validate():
