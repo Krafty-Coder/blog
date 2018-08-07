@@ -47,12 +47,10 @@
     transform: translateY(-5px);
   }
 }
-body {
+.body {
   text-align: center;
   margin: 0;
   background: #EEEEEE; /* white */
-
-
 }
 .h2header {
   border-left: 6px solid #FAFAFA;
@@ -72,13 +70,12 @@ body {
 #particles-js {
   position: absolute;
   width: 100%;
-  height: 100%;
   background-color: black;
   background-image: url("https://images.unsplash.com/photo-1453672655124-085736c852be?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=79ac2efe17116535e293054dfb10e6c7");
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-  background-position: 50% 50%;
+  background-position: 20% 20%
 }
 
 /* ---- stats.js ---- */
@@ -139,10 +136,11 @@ body {
   cursor: pointer;
 }
 .headerimg {
-  margin-top: 20vh;
+  margin-top: 9vh;
   position: relative;
   border-radius: 100%;
-  max-width: 200px;
+  max-width: 150px;
+  max-height: 180px;
   -webkit-box-shadow: 0px 0px 65px -16px rgba(255,255,255,1);
 -moz-box-shadow: 0px 0px 65px -16px rgba(255,255,255,1);
 box-shadow: 0px 0px 65px -16px rgba(255,255,255,1);

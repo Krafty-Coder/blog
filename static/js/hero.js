@@ -177,9 +177,11 @@ class TextScramble {
 
 const phrases = [
   'Krafty Coder',
-  'Coder',
-  'WebDeveloper',
-  'Ajax',
+  'Mentor',
+  'Web Developer',
+  'Software Developer',
+  'Gulp',
+  'Git',
   'Python',
   'Django',
   'React',
@@ -200,7 +202,7 @@ const next = () => {
 
 next();
 
-/* Scroll to #div */ 
+/* Scroll to #div */
 
 $('a[href^="#"]').on('click', function(event) {
 
@@ -215,116 +217,3 @@ $('a[href^="#"]').on('click', function(event) {
 
 });
 
-/* Skills */
-
-var lang = {
-  "html": "100%",
-  "css": "90%",
-  "javascript": "70%",
-  "php": "55%",
-  "angular": "65%"
-};
-
-var multiply = 4;
-
-$.each( lang, function( language, pourcent) {
-
-  var delay = 700;
-  
-  setTimeout(function() {
-    $('#'+language+'-pourcent').html(pourcent);
-  },delay*multiply);
-  
-  multiply++;
-
-});
-// external js: isotope.pkgd.js
-
-// init Isotope
-var $grid = $('.grid').isotope({
-  itemSelector: '.element-item',
-  layoutMode: 'fitRows'
-});
-// filter functions
-var filterFns = {
-  // show if number is greater than 50
-  numberGreaterThan50: function() {
-    var number = $(this).find('.number').text();
-    return parseInt( number, 10 ) > 50;
-  },
-  // show if name ends with -ium
-  ium: function() {
-    var name = $(this).find('.name').text();
-    return name.match( /ium$/ );
-  }
-};
-// bind filter button click
-$('.filters-button-group').on( 'click', 'button', function() {
-  var filterValue = $( this ).attr('data-filter');
-  // use filterFn if matches value
-  filterValue = filterFns[ filterValue ] || filterValue;
-  $grid.isotope({ filter: filterValue });
-});
-// change is-checked class on buttons
-$('.button-group').each( function( i, buttonGroup ) {
-  var $buttonGroup = $( buttonGroup );
-  $buttonGroup.on( 'click', 'button', function() {
-    $buttonGroup.find('.is-checked').removeClass('is-checked');
-    $( this ).addClass('is-checked');
-  });
-});
-var jumboHeight = $('.jumbotron').outerHeight();
-function parallax(){
-    var scrolled = $(window).scrollTop();
-    $('.bg').css('height', (jumboHeight-scrolled) + 'px');
-}
-
-$(window).scroll(function(e){
-    parallax();
-});
-
-$(window).scroll(function (event) {
-    var scroll = $(window).scrollTop();
-    document.getElementById("tttt").innerHTML=scroll;
-  
-  if ( scroll >= 350 ) {
-    document.getElementById("primeiro").className="fadeInLeft animated";
-    
-    document.getElementById("segundo1").className="fadeInRight animated";
-    
-    document.getElementById("segundo2").className="fadeInLeft animated";
-  }
-  
-  
-  if ( scroll >= 560 ) {
-    document.getElementById("terceiro1").className="fadeInLeft animated";
-
-        
-    document.getElementById("terceiro2").className="fadeInRight animated";
-    
-    document.getElementById("terceiro3").className="fadeInLeft animated";
-    
-    document.getElementById("terceiro4").className="fadeInLeft animated";
-    
-    document.getElementById("terceiro5").className="fadeInLeft animated";
-  }
-  
-  if ( scroll >= 1300 ) {
-    document.getElementById("btn1").className="fadeInUp animated";
-    document.getElementById("btn2").className="fadeInDown animated";
-  }
-
-  
-  if ( scroll >= 2300 ) {
-    document.getElementById("titleproj").className="fadeInUp animated";
-  }
-  
-  if ( scroll >= 2400 ) {
-    document.getElementById("textproj").className="fadeInLeft animated col-md-6 mt6";
-  }
-  
-  if ( scroll >= 2700 ) {
-    document.getElementById("social").className="fadeInUp animated";
-  }
-
-});

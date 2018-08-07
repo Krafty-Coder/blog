@@ -1,8 +1,8 @@
 .image {
 }
-img {
+.image {
   width: 100%;
-  height: 60vh;
+  height: 50vh;
 }
 .align-center {
   text-align: center;

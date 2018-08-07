@@ -8,14 +8,19 @@
     <title>Flask Prototype</title>
     <link href='static/css/style.css' rel="stylesheet" type='text/css'>
     <link href='static/css/index.css' rel="stylesheet" type='text/css'>
+    <link href='static/css/particle.css' rel="stylesheet" type='text/css'>
     <link href='static/css/bootstrap.min.css' rel="stylesheet" type='text/css'>
   </head>
   <body>
     <div class="container">
-    {% include 'includes/_messages.html' %}
-    {% include 'includes/_navbar.html' %}
-    {% block body %}{% endblock %}
+      {% include 'includes/_messages.html' %}
+      {% include 'includes/_navbar.html' %}
+      {% block body %}{% endblock %}
+      {% include 'includes/_footer.html' %}
     </div>
-  <script src="static/js/myscript.js"></script>
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/myscript.js"></script>
+    <script src="static/js/particle.js"></script>
+    <script src="static/js/hero.js"></script>
   </body>
 </html>
