@@ -1,8 +1,10 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
-from flask_mysqldb import MySQL
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators
-from passlib.hash import sha256_crypt
 from functools import wraps
+
+from flask import (Flask, flash, logging, redirect, render_template, request,
+                   session, url_for)
+from flask_mysqldb import MySQL
+from passlib.hash import sha256_crypt
+from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 
 app = Flask(__name__)
 
@@ -21,7 +23,7 @@ mysql = MySQL(app)
 def index():
     cur = mysql.connection.cursor()
 
-    result = cur.execute("SELECT * FROM articles")
+    cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
 
@@ -52,17 +54,22 @@ def articles():
         return render_template('articles.html', msg=msg)
 
 
-@app.route('/article/<string:id>/')
+@app.route('/article/<id>', methods=['POST', 'GET'])
 def article(id):
     cur = mysql.connection.cursor()
+
     cur.execute("SELECT * FROM articles WHERE id ={}".format(id))
+
     article = cur.fetchone()
-    # cur.close(
+
+    cur.close()
+
     return render_template('article.html', article=article)
+
 
 class RegisterForm(Form):
     name = StringField(u'Name', validators=[validators.input_required()])
-    username  = StringField(u'Username', validators=[validators.optional()])
+    username = StringField(u'Username', validators=[validators.optional()])
     email = StringField('Email', [validators.Length(min=6, max=50)])
     password = PasswordField('Password', [
         validators.DataRequired(),
@@ -83,7 +90,12 @@ def register():
         # Create cursor
         cur = mysql.connection.cursor()
 
-        cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
+        cur.execute(
+            "INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)",
+            (name,
+             email,
+             username,
+             password))
 
         # Commit to DB
         mysql.connection.commit()
@@ -110,7 +122,9 @@ def login():
         cur = mysql.connection.cursor()
 
         # Get user by username
-        result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
+        result = cur.execute(
+            "SELECT * FROM users WHERE username = %s",
+            [username])
 
         if result > 0:
             # Get stored hash
@@ -195,7 +209,11 @@ def add_article():
         # Create cursor
         cursor = mysql.connection.cursor()
 
-        cursor.execute("INSERT INTO articles(title, author, body) VALUES(%s, %s, %s);", (title, session['username'], body))
+        cursor.execute(
+            "INSERT INTO articles(title, author, body) VALUES(%s, %s, %s);",
+            (title,
+             session['username'],
+             body))
 
         # Commit to DB
         mysql.connection.commit()
@@ -230,7 +248,9 @@ def edit_article(id):
         # Create cursor
         cursor = mysql.connection.cursor()
 
-        cursor.execute("UPDATE articles SET title={}, body={} WHERE id={}".format(title, body, id))
+        cursor.execute(
+            "UPDATE articles SET title={}, body={} WHERE id={}".format(
+                title, body, id))
 
         # Commit to DB
         mysql.connection.commit()
@@ -256,12 +276,6 @@ def delete_article(id):
     cur.close()
 
 
-
-
 if __name__ == '__main__':
     app.secret_key = 'secret_key_219641456885_krafty'
     app.run(debug=True)
-
-
-
-
