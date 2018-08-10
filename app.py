@@ -54,7 +54,7 @@ def articles():
         return render_template('articles.html', msg=msg)
 
 
-@app.route('/article/<id>', methods=['POST', 'GET'])
+@app.route('/article/<string:id>', methods=['POST', 'GET'])
 def article(id):
     cur = mysql.connection.cursor()
 
