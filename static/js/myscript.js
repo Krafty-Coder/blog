@@ -11,7 +11,7 @@ $(function() {
 
 
 $(function(){
-  var btnSubmit = $('#share
+  var btnSubmit = $('#share');
   btnSubmit.attr('disabled', 'disabled');
   $('input[name=chosen]').change(function(e){
     if($(this).val() == 'agree'){
