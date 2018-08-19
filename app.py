@@ -1,6 +1,5 @@
 from functools import wraps
-
-from flask import (Flask, flash, logging, redirect, render_template, request,
+from flask import (Flask, flash, redirect, render_template, request,
                    session, url_for)
 from flask_mysqldb import MySQL
 from passlib.hash import sha256_crypt
@@ -54,7 +53,7 @@ def articles():
         return render_template('articles.html', msg=msg)
 
 
-@app.route('/article/<string:id>', methods=['POST', 'GET'])
+@app.route('/article/<string:id>/', methods=['GET'])
 def article(id):
     cur = mysql.connection.cursor()
 
@@ -232,7 +231,7 @@ def add_article():
 def edit_article(id):
     cur = mysql.connection.cursor()
 
-    result = cur.execute("SELECT * FROM articles WHERE id = {}".format(id))
+    cur.execute("SELECT * FROM articles WHERE id = {}".format(id))
 
     article = cur.fetchone()
 
@@ -269,7 +268,7 @@ def edit_article(id):
 def delete_article(id):
     cur = mysql.connection.cursor()
 
-    result = cur.execute("DELETE FROM articles WHERE id = {}".format(id))
+    cur.execute("DELETE FROM articles WHERE id = {}".format(id))
 
     mysql.connection.commit()
 
@@ -277,5 +276,5 @@ def delete_article(id):
 
 
 if __name__ == '__main__':
-    app.secret_key = 'secret_key_219641456885_krafty'
+    app.secret_key = 'secret_key_219641456885_kraftvy'
     app.run(debug=True)
