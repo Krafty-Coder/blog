@@ -1,8 +1,23 @@
 # Test file
-from app import app
+from app import app, mysql
 import unittest
 
-class FlaskTestCase(unittest.TestCase):
+class FlaskTestAppCases(unittest.TestCase):
+
+    def setUp(self):
+        self.cur = mysql.connection.cursor()
+        self.cur.execute(
+            "INSERT INTO users(name, email, username, password) VALUES('admin',\
+            'admin@gmail.com', 'admin', 'adminpass')")
+
+        # Commit to DB
+        mysql.connection.commit()
+
+        # Close Connection
+        self.cur.close()
+
+    def tearDown(self):
+        return self.cur.drop
 
     #Ensure that Flask was set up correctly
     def test_index(self):
@@ -20,7 +35,7 @@ class FlaskTestCase(unittest.TestCase):
         tester = app.test_client(self)
         response = tester.post(
             '/login',
-            data=dict(username="admin", password="admin"),
+            data=dict(username="admin", password="adminpass"),
             follow_redirects=True
         )
         self.assertIn(b'You are now logged in', response.data)
