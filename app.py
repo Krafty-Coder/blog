@@ -1,3 +1,4 @@
+import os
 from functools import wraps
 from flask import (Flask, flash, redirect, render_template, request,
                    session, url_for)
@@ -6,13 +7,6 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 
 app = Flask(__name__)
-
-# Config mysql
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'adminray'
-app.config['MYSQL_DB'] = 'myflaskapp'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 # Init MYSQL
 mysql = MySQL(app)
@@ -276,5 +270,8 @@ def delete_article(id):
 
 
 if __name__ == '__main__':
-    app.secret_key = 'secret_key_219641456885_kraftvy'
-    app.run(debug=True)
+    app.secret_key = app.config['SECRET_KEY']
+    app.run(host="127.0.0.1", port=int(os.environ.get("PORT", 8000)),
+            debug=app.config['DEBUG'])
+
+
