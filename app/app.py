@@ -6,12 +6,13 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 
 from app.models import Models
-from app.models.Models.connect import cur as cur, conn as conn
 
 app = Flask(__name__)
 
 connect = Models()
 connect = connect.connect()
+cur = connect().cur
+conn = connect().conn
 
 @app.route('/')
 def index():
