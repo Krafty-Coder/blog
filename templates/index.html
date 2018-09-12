@@ -3,20 +3,17 @@
 {% block body %}
 <div class="image">
   <p>
-  Welcome to my blog awesome guy... You read, comment share and if you have a great piece you can 
+  Welcome to my blog awesome guy... You read, comment, share and if you have a great piece you can
   request via my inbox and get your article posted for free..
-  </p>
-  <p> Make sure you share your favorite one to your friends and even make an impression on what
-  you think about the site below.
   </p>
 </div>
 <div class="align-center">
 <p> Blog Site </p>
-{% if session.logged_in == Null%}
-  <a href="/login" class="btn btn-lg"> Login</a>
-  <a href="/register" class="btn btn-lg"> Register</a>
-</div>
-{% endif %}
+<!-- {% if session.logged_in == Null%} -->
+<!--   <a href="/login" class="btn btn-lg"> Login</a> -->
+<!--   <a href="/register" class="btn btn-lg"> Register</a> -->
+<!-- </div> -->
+<!-- {% endif %} -->
 
 <section class="cards-wrapper">
   {% for article in articles %}
