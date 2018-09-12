@@ -57,18 +57,6 @@ header {
 
 }
 
-header h1 {
-  font-size: 42px;
-  color: #666;
-  line-height: 230px;
-  text-transform: uppercase;
-  font-weight: 100;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-
 header nav {
   position: absolute;
   bottom: 0;
@@ -80,7 +68,8 @@ header nav {
 }
 
 header nav a {
-  color: #666;
+  color: #fff;
+  border: 1px solid #f0f0f0;
   display: inline-block;
   padding: 10px 15px;
   line-height: 1;
@@ -88,7 +77,6 @@ header nav a {
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px #fff;
 }
 
 header nav a:hover {
@@ -138,7 +126,6 @@ p {
 .sticky-header nav a {
   font-size: 18px;
   padding: 0.5em;
-  border: 1px;
 }
 
 .sticky-header nav {
@@ -173,8 +160,8 @@ a {
   justify-content: center;
   align-items: center;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 4rem;
-  padding: 4rem;
+  grid-gap: 1rem;
+  padding: 1em 1.3em;
   margin: 0 auto;
   width: max-content;
 }
@@ -182,7 +169,7 @@ a {
 .card {
   --bg-filter-opacity: 0.5;
   background-image: linear-gradient(rgba(0,0,0,var(--bg-filter-opacity)),rgba(0,0,0,var(--bg-filter-opacity))), var(--bg-img);
-  height: 20em;
+  height: 22em;
   width: 15em;
   font-size: 1.5em;
   color: white;
@@ -328,7 +315,7 @@ a {
 
 @media screen and (max-width: 500px) {
   .cards-wrapper {
-    padding: 4rem 2rem;
+    padding: 2rem 1rem;
   }
   .card {
     max-width: calc(100vw - 4rem);
