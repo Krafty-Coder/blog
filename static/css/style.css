@@ -11,10 +11,22 @@ body {
   margin: 0;
 }
 
+p {
+  font-family: 'Maven Pro', sans-serif;
+  font-size: 1.2em;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Titillium Web', sans-serif;
+}
+
 body {
   background-color: #111;
-  font-family: helvetica, arial, sans-serif;
-  font-size: 16px;
+  font-family: 'Maven Pro', sans-serif;
   padding-top: 52vh;
   -moz-transition: padding-top 0.5s ease;
   -o-transition: padding-top 0.5s ease;
@@ -45,19 +57,6 @@ header {
 
 }
 
-header h1 {
-  font-size: 42px;
-  color: #666;
-  line-height: 230px;
-  text-transform: uppercase;
-  font-weight: 100;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-
-}
-
 header nav {
   position: absolute;
   bottom: 0;
@@ -66,11 +65,11 @@ header nav {
   line-height: 60px;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.1);
-
 }
 
 header nav a {
-  color: #666;
+  color: #fff;
+  border: 1px solid #f0f0f0;
   display: inline-block;
   padding: 10px 15px;
   line-height: 1;
@@ -78,14 +77,11 @@ header nav a {
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   border-radius: 2px;
-
 }
 
 header nav a:hover {
-  -moz-box-shadow: 0 0 0 1px #fff;
-  -webkit-box-shadow: 0 0 0 1px #fff;
-  box-shadow: 0 0 0 1px #fff;
-
+  background-color: white;
+  color: gray;
 }
 
 h2 {
@@ -109,21 +105,6 @@ p {
 
 }
 
-/*
-section {
-  padding: 20px;
-  margin-bottom: 40px;
-  background-color: #fff;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-
-}
-*/
-
 /* Sticky Header Style */
 /* ---------------------------------------- */
 
@@ -142,12 +123,18 @@ section {
   transform: scale(0, 0);
 }
 
+.sticky-header nav a {
+  font-size: 18px;
+  padding: 0.5em;
+}
+
+.sticky-header nav {
+  background-color: rgba(0, 0, 0, 0.9);
+}
 
 /*
 This is the styling for articles.css
 */
-
-@import url('https://fonts.googleapis.com/css?family=Heebo:400,700|Open+Sans:400,700');
 
 :root {
   --color: #3c3163;
@@ -161,7 +148,6 @@ This is the styling for articles.css
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: 'Open Sans';
   background: #fafafa;
 }
 
@@ -174,17 +160,16 @@ a {
   justify-content: center;
   align-items: center;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 4rem;
-  padding: 4rem;
+  grid-gap: 1rem;
+  padding: 1em 1.3em;
   margin: 0 auto;
   width: max-content;
 }
 
 .card {
-  font-family: 'Heebo';
   --bg-filter-opacity: 0.5;
   background-image: linear-gradient(rgba(0,0,0,var(--bg-filter-opacity)),rgba(0,0,0,var(--bg-filter-opacity))), var(--bg-img);
-  height: 20em;
+  height: 22em;
   width: 15em;
   font-size: 1.5em;
   color: white;
@@ -215,7 +200,6 @@ a {
 
 .card p {
   font-size: 0.75em;
-  font-family: 'Open Sans';
   margin-top: 0.5em;
   line-height: 2em;
 }
@@ -232,6 +216,10 @@ a {
   margin-right: 0.5em;
   line-height: 1.5em;
   transition: all, var(--transition-time);
+}
+
+.card:hover p {
+  background: var(--color);
 }
 
 .card:hover .tags .tag {
@@ -269,7 +257,7 @@ a {
 }
 
 .card:after {
-  background: white;
+  background: #999;
   width: 200%;
   height: 200%;
 }
@@ -327,7 +315,7 @@ a {
 
 @media screen and (max-width: 500px) {
   .cards-wrapper {
-    padding: 4rem 2rem;
+    padding: 2rem 1rem;
   }
   .card {
     max-width: calc(100vw - 4rem);
