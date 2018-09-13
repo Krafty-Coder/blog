@@ -1,6 +1,19 @@
 # Test file
-from app import app, mysql
 import unittest
+from flask import Flask
+from flask_mysqldb import MySQL
+
+app = Flask(__name__)
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'adminray'
+app.config['MYSQL_DB'] = 'myflaskapp'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
+# Init MYSQL
+mysql = MySQL(app)
+
 
 class FlaskTestAppCases(unittest.TestCase):
 
@@ -14,7 +27,6 @@ class FlaskTestAppCases(unittest.TestCase):
         mysql.connection.commit()
 
         # Close Connection
-        self.cur.close()
 
     def tearDown(self):
         return self.cur.drop
