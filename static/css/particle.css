@@ -150,7 +150,7 @@ box-shadow: 0px 0px 65px -16px rgba(255,255,255,1);
 
 @media only screen and (max-width: 600px) {
   .headerimg {
-    margin-top: 2em;
+    margin-top: 4em;
     border-radius: 35%;
     max-width: 90px;
     max-height: 100px;
