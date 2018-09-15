@@ -1,7 +1,8 @@
 # Test file
 import unittest
 from flask import Flask
-from flask_mysqldb import MySQL
+import app
+from flaskext.mysql import MySQL
 
 app = Flask(__name__)
 
@@ -11,11 +12,13 @@ app.config['MYSQL_PASSWORD'] = 'adminray'
 app.config['MYSQL_DB'] = 'myflaskapp'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
-# Init MYSQL
-mysql = MySQL(app)
+mysql = MySQL()
+mysql.init_app(app)
 
 
 class FlaskTestAppCases(unittest.TestCase):
+    mysql = MySQL()
+    mysql.init_app(app)
 
     def setUp(self):
         self.cur = mysql.connection.cursor()
