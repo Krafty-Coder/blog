@@ -135,4 +135,13 @@ input[type='submit']:disabled {
 
 }
 
+#articles {
+  padding:1em 3em;
+}
+
+@media screen and (max-width: 60em) {
+  #articles {
+    padding: 1em;
+  }
+}
 
