@@ -60,8 +60,8 @@ a {
 .fa-linkedin:hover{
   color: #007bb5;
 }
-.fa-facebook:hover {
-  color: #3b5998;
+.fa-quora:hover {
+  color: #fe0000;
 }
 .fa-twitter:hover {
   color: #007bb5;
@@ -69,8 +69,8 @@ a {
 .fa-instagram:hover {
   color: #c32aa3;
 }
-.fa-youtube:hover {
-  color: #ff0000;
+.fa-github:hover {
+  color: #222;
 }
 .fa-snapchat:hover {
   color:#fffc00;
@@ -78,8 +78,8 @@ a {
 span {
   font-size: 1.4em;
 }
-span:hover {
-  color:red;
+p span:hover {
+  color: #f00;
   cursor: pointer;
 }
 p a {
