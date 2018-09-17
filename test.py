@@ -1,23 +1,39 @@
-# Test file
-from app import app, mysql
+import os
+import flaskr
 import unittest
+import tempfile
 
-class FlaskTestAppCases(unittest.TestCase):
+from app import app, mysql
+
+
+class FlaskrTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.cur = mysql.connection.cursor()
-        self.cur.execute(
-            "INSERT INTO users(name, email, username, password) VALUES('admin',\
-            'admin@gmail.com', 'admin', 'adminpass')")
-
-        # Commit to DB
-        mysql.connection.commit()
-
-        # Close Connection
-        self.cur.close()
+        self.db_fd, flaskr.app.config['DATABASE'] = tempfile.mkstemp()
+        flaskr.app.testing = True
+        self.app = flaskr.app.test_client()
+        with flaskr.app.app_context():
+            flaskr.init_db()
 
     def tearDown(self):
-        return self.cur.drop
+        os.close(self.db_fd)
+        os.unlink(flaskr.app.config['DATABASE'])
+
+
+    # def setUp(self):
+    #     self.cur = mysql.connection.cursor()
+    #     self.cur.execute(
+    #         "INSERT INTO users(name, email, username, password) VALUES('admin',\
+    #         'admin@gmail.com', 'admin', 'adminpass')")
+
+    #     # Commit to DB
+    #     mysql.connection.commit()
+
+    #     # Close Connection
+    #     self.cur.close()
+
+    # def tearDown(self):
+    #     return self.cur.drop
 
     #Ensure that Flask was set up correctly
     def test_index(self):

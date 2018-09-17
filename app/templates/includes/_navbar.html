@@ -1,0 +1,26 @@
+<section class="top-bar">
+  <header>
+    <div class="body">
+      <div id="particles-js" class="fadeIn"></div>
+      <img class="headerimg fadeInUp animated" src="/static/images/krafty.jpg"/>
+      <div class="header">
+        <h2 class="fadeInUp animated text h2header animate fadeInDown"> Krafty Coder </h2>
+      </div>
+    </div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="http://kraftycoder.ml">Portfolio</a>
+      <a href="http://kraftycoder.ml/#services">Services</a>
+      <a href="/articles">Articles</a>
+      {% if session.logged_in %}
+      <a href="/dashboard">Dashboard</a>
+      <a href="/logout">Logout</a>
+      {% else %}
+      <a href="/register">Register</a>
+      <a href="/login">Login</a>
+      {% endif %}
+    </nav>
+  </header>
+</section>
+
