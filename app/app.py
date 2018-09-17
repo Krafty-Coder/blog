@@ -105,6 +105,7 @@ def login():
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
                 # Password and username matches
+                create_cur()
                 session['logged_in'] = True
                 session['username'] = username
 
