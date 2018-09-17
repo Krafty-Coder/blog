@@ -11,8 +11,8 @@ app = Flask(__name__)
 
 connect = Models()
 connect = connect.connect()
-cur = connect().cur
-conn = connect().conn
+cur = connect.cur
+conn = connect.conn
 
 @app.route('/')
 def index():
