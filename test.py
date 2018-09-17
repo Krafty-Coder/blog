@@ -5,7 +5,6 @@ import tempfile
 
 from app import app, mysql
 
-
 class FlaskrTestCase(unittest.TestCase):
 
     def setUp(self):
