@@ -8,10 +8,10 @@ from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 app = Flask(__name__)
 
 # Config mysql
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'adminray'
-app.config['MYSQL_DB'] = 'myflaskapp'
+app.config['MYSQL_HOST'] = 'ec2-54-225-241-25.compute-1.amazonaws.com'
+app.config['MYSQL_USER'] = 'oqrnhavmylzeql'
+app.config['MYSQL_PASSWORD'] = '290ca06f7d3667c7ebeb2d89f1ed502ce9db4ff7d91d2fd4269e92f7052a2283'
+app.config['MYSQL_DB'] = 'd49pt4ur37g33c'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 # Init MYSQL
