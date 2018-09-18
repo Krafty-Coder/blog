@@ -1,0 +1,22 @@
+.image {
+  margin: auto;
+  width: 70%;
+  color: black
+}
+.image p {
+  color: black;
+}
+.align-center {
+  text-align: center;
+}
+.align-center a {
+  background-color: #0100fa;
+  color: #ffe;
+  margin: 1em 1em;
+}
+
+align-center a:hover {
+  background-color: #010;
+  color: #fff;
+  font-weight: 900;
+}
