@@ -277,4 +277,4 @@ def delete_article(id):
 
 if __name__ == '__main__':
     app.secret_key = 'secret_key_219641456885_krafty'
-    app.run(debug=True)
+    app.run(debug=False)
