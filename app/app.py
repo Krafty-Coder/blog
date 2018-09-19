@@ -16,7 +16,6 @@ def index():
     cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
-    conn.close()
     return render_template('index.html', articles=articles)
 
 
@@ -32,7 +31,6 @@ def articles():
 
     articles = cur.fetchall()
 
-
     if result:
         return render_template('articles.html', articles=articles)
     else:
@@ -46,8 +44,6 @@ def article(id):
     cur.execute("SELECT * FROM articles WHERE id ={}".format(id))
 
     article = cur.fetchone()
-
-
     return render_template('article.html', article=article)
 
 
@@ -187,9 +183,6 @@ def add_article():
 
         # Commit to DB
         conn.commit()
-
-        # close connection
-        cur.close()
 
         flash('Article Created successfully', 'success')
         return redirect(url_for('dashboard'))
