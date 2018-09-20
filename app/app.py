@@ -99,12 +99,12 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        create_cur()
         # GEt form values
         username = request.form['username']
         password_candidate = request.form['password']
 
         # Get user by username
+        create_cur()
         result = cur.execute(
             "SELECT * FROM users WHERE username = %s",
             [username])
