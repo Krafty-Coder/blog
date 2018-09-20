@@ -1,27 +1,14 @@
 from functools import wraps
 from flask import (Flask, flash, redirect, render_template, request,
                    session, url_for)
-from flask_mysqldb import MySQL
+from app.models import cur
 from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 
 app = Flask(__name__)
 
-# Config mysql
-app.config['MYSQL_HOST'] = 'ec2-54-225-241-25.compute-1.amazonaws.com'
-app.config['MYSQL_USER'] = 'oqrnhavmylzeql'
-app.config['MYSQL_PASSWORD'] = '290ca06f7d3667c7ebeb2d89f1ed502ce9db4ff7d91d2fd4269e92f7052a2283'
-app.config['MYSQL_DB'] = 'd49pt4ur37g33c'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-
-# Init MYSQL
-mysql = MySQL(app)
-
-
 @app.route('/')
 def index():
-    cur = mysql.connection.cursor()
-
     cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
@@ -38,8 +25,6 @@ def about():
 
 @app.route('/articles')
 def articles():
-    cur = mysql.connection.cursor()
-
     result = cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
@@ -55,8 +40,6 @@ def articles():
 
 @app.route('/article/<string:id>/', methods=['GET'])
 def article(id):
-    cur = mysql.connection.cursor()
-
     cur.execute("SELECT * FROM articles WHERE id ={}".format(id))
 
     article = cur.fetchone()
@@ -86,9 +69,6 @@ def register():
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
-        # Create cursor
-        cur = mysql.connection.cursor()
-
         cur.execute(
             "INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)",
             (name,
@@ -97,7 +77,7 @@ def register():
              password))
 
         # Commit to DB
-        mysql.connection.commit()
+        cur.commit()
 
         # Close Connection
         cur.close()
@@ -116,9 +96,6 @@ def login():
         # GEt form values
         username = request.form['username']
         password_candidate = request.form['password']
-
-        # Create cursor
-        cur = mysql.connection.cursor()
 
         # Get user by username
         result = cur.execute(
@@ -176,8 +153,6 @@ def logout():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
-    cur = mysql.connection.cursor()
-
     result = cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
@@ -206,19 +181,17 @@ def add_article():
         body = form.body.data
 
         # Create cursor
-        cursor = mysql.connection.cursor()
-
-        cursor.execute(
+        cur.execute(
             "INSERT INTO articles(title, author, body) VALUES(%s, %s, %s);",
             (title,
              session['username'],
              body))
 
         # Commit to DB
-        mysql.connection.commit()
+        cur.commit()
 
         # close connection
-        cursor.close()
+        cur.close()
 
         flash('Article Created successfully', 'success')
         return redirect(url_for('dashboard'))
@@ -229,8 +202,6 @@ def add_article():
 @app.route('/edit_article/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_article(id):
-    cur = mysql.connection.cursor()
-
     cur.execute("SELECT * FROM articles WHERE id = {}".format(id))
 
     article = cur.fetchone()
@@ -244,18 +215,15 @@ def edit_article(id):
         title = request.form['title']
         body = request.form['body']
 
-        # Create cursor
-        cursor = mysql.connection.cursor()
-
-        cursor.execute(
+        cur.execute(
             "UPDATE articles SET title={}, body={} WHERE id={}".format(
                 title, body, id))
 
         # Commit to DB
-        mysql.connection.commit()
+        cur.commit()
 
         # close connection
-        cursor.close()
+        cur.close()
 
         flash('Article Updated successfully', 'success')
         return redirect(url_for('dashboard'))
@@ -266,11 +234,9 @@ def edit_article(id):
 @app.route('/delete_article', methods=['POST'])
 @is_logged_in
 def delete_article(id):
-    cur = mysql.connection.cursor()
-
     cur.execute("DELETE FROM articles WHERE id = {}".format(id))
 
-    mysql.connection.commit()
+    cur.commit()
 
     cur.close()
 
