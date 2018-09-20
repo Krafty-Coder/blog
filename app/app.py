@@ -110,6 +110,7 @@ def login():
             [username])
 
         if result:
+            create_cur()
             # Get stored hash
             data = cur.fetchone()
             password = data['password']
