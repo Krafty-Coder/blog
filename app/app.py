@@ -30,7 +30,7 @@ def articles():
     articles = cur.fetchall()
 
 
-    if result > 0:
+    if result:
         conn.close()
         return render_template('articles.html', articles=articles)
     else:
@@ -100,7 +100,7 @@ def login():
             "SELECT * FROM users WHERE username = %s",
             [username])
 
-        if result > 0:
+        if result:
             # Get stored hash
             data = cur.fetchone()
             password = data['password']
@@ -157,7 +157,7 @@ def dashboard():
 
     conn.close()
 
-    if result > 0:
+    if result:
         return render_template('dashboard.html', articles=articles)
     else:
         msg = 'No article found, please add article to view them here'
