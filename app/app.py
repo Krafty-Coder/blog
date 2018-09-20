@@ -171,7 +171,6 @@ class ArticleForm(Form):
 
 # Add article
 @app.route('/add_article', methods=['GET', 'POST'])
-@is_logged_in
 def add_article():
     form = ArticleForm(request.form)
     if request.method == 'POST' and form.validate():
