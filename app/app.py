@@ -106,8 +106,7 @@ def login():
         # Get user by username
         create_cur()
         result = cur.execute(
-            "SELECT * FROM users WHERE username = %s",
-            [username])
+            "SELECT * FROM users WHERE username = %s",[username])
 
         if result:
             create_cur()
