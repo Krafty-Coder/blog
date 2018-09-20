@@ -4,3 +4,20 @@ conn = psycopg2.connect("dbname=d49pt4ur37g33c user=oqrnhavmylzeql password=290c
 cur = conn.cursor()  # Activate connection using the cursor
 
 
+cur.execute('''CREATE TABLE IF NOT EXISTS articles(
+    id serial PRIMARY KEY,
+    title varchar (50) NOT NULL,
+    author varchar (100) NOT NULL,
+    body text NOT NULL,
+    create_date timestamp default current_timestamp
+    ) ''')
+
+cur.execute('''CREATE TABLE IF NOT EXISTS users(
+    id serial PRIMARY KEY,
+    username varchar (50) NOT NULL,
+    email varchar (100) NOT NULL,
+    password varchar (100) NOT NULL,
+    password_confirmation varchar (100) NOT NULL,
+    timestamp timestamp default current_timestamp
+    ) ''')
+
