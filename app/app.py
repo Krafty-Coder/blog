@@ -7,13 +7,16 @@ from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 
 app = Flask(__name__)
 
+def create_cur():
+    return conn.cursor()
+
 @app.route('/')
 def index():
     cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
 
-    conn.close()
+    cur.close()
 
     return render_template('index.html', articles=articles)
 
@@ -31,10 +34,10 @@ def articles():
 
 
     if result:
-        conn.close()
+        cur.close()
         return render_template('articles.html', articles=articles)
     else:
-        conn.close()
+        cur.close()
         msg = 'No article found, please add article to view them here'
         return render_template('articles.html', msg=msg)
 
@@ -45,7 +48,7 @@ def article(id):
 
     article = cur.fetchone()
 
-    conn.close()
+    cur.close()
 
     return render_template('article.html', article=article)
 
@@ -106,7 +109,7 @@ def login():
             password = data['password']
 
             # Compare Passwords
-            conn.close()
+            cur.close()
             if sha256_crypt.verify(password_candidate, password):
                 # Password and username matches
                 session['logged_in'] = True
@@ -120,6 +123,7 @@ def login():
                 return render_template('login.html', error=error)
             # close connection
         else:
+            cur.close()
             error = "Username not found"
             return render_template('login.html', error=error)
 
@@ -155,7 +159,7 @@ def dashboard():
 
     articles = cur.fetchall()
 
-    conn.close()
+    cur.close()
 
     if result:
         return render_template('dashboard.html', articles=articles)
@@ -171,6 +175,7 @@ class ArticleForm(Form):
 
 # Add article
 @app.route('/add_article', methods=['GET', 'POST'])
+@is_logged_in
 def add_article():
     form = ArticleForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -188,7 +193,7 @@ def add_article():
         conn.commit()
 
         # close connection
-        conn.close()
+        cur.close()
 
         flash('Article Created successfully', 'success')
         return redirect(url_for('dashboard'))
@@ -220,7 +225,7 @@ def edit_article(id):
         conn.commit()
 
         # close connection
-        conn.close()
+        cur.close()
 
         flash('Article Updated successfully', 'success')
         return redirect(url_for('dashboard'))
@@ -235,7 +240,7 @@ def delete_article(id):
 
     conn.commit()
 
-    conn.close()
+    cur.close()
 
 
 if __name__ == '__main__':
