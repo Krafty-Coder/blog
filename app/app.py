@@ -17,8 +17,6 @@ def index():
 
     articles = cur.fetchall()
 
-    cur.close()
-
     return render_template('index.html', articles=articles)
 
 
@@ -36,10 +34,8 @@ def articles():
 
 
     if result:
-        cur.close()
         return render_template('articles.html', articles=articles)
     else:
-        cur.close()
         msg = 'No article found, please add article to view them here'
         return render_template('articles.html', msg=msg)
 
@@ -51,7 +47,6 @@ def article(id):
 
     article = cur.fetchone()
 
-    cur.close()
 
     return render_template('article.html', article=article)
 
@@ -86,7 +81,6 @@ def register():
 
         # Commit to DB
         conn.commit()
-        cur.close()
 
         flash('You are now registered and can log in', 'success')
 
@@ -128,7 +122,6 @@ def login():
                 return render_template('login.html', error=error)
             # close connection
         else:
-            cur.close()
             error = "Username not found"
             return render_template('login.html', error=error)
 
@@ -164,8 +157,6 @@ def dashboard():
     result = cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
-
-    cur.close()
 
     if result:
         return render_template('dashboard.html', articles=articles)
@@ -232,9 +223,6 @@ def edit_article(id):
         # Commit to DB
         conn.commit()
 
-        # close connection
-        cur.close()
-
         flash('Article Updated successfully', 'success')
         return redirect(url_for('dashboard'))
 
@@ -248,8 +236,6 @@ def delete_article(id):
     cur.execute("DELETE FROM articles WHERE id = {}".format(id))
 
     conn.commit()
-
-    cur.close()
 
 
 if __name__ == '__main__':
