@@ -98,8 +98,8 @@ def register():
 # User Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    create_cur()
     if request.method == 'POST':
+        create_cur()
         # GEt form values
         username = request.form['username']
         password_candidate = request.form['password']
