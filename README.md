@@ -1,4 +1,4 @@
-### A Flask Blog application. [![Build Status](https://travis-ci.org/Krafty-Coder/articles_app.svg?branch=master)](https://travis-ci.org) 
+### A Flask Blog application. [![Build Status](https://travis-ci.org/Krafty-Coder/blog.svg?branch=master)](https://travis-ci.org) 
 
 _Users_ can edit and create posts, keep track of posts, but comments are implemented for now
 
