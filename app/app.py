@@ -78,7 +78,7 @@ def register():
              password))
 
         # Commit to DB
-        cur.commit()
+        conn.commit()
 
         flash('You are now registered and can log in', 'success')
 
@@ -186,7 +186,7 @@ def add_article():
              body))
 
         # Commit to DB
-        cur.commit()
+        conn.commit()
 
         # close connection
         conn.close()
@@ -218,7 +218,7 @@ def edit_article(id):
                 title, body, id))
 
         # Commit to DB
-        cur.commit()
+        conn.commit()
 
         # close connection
         conn.close()
@@ -234,7 +234,7 @@ def edit_article(id):
 def delete_article(id):
     cur.execute("DELETE FROM articles WHERE id = {}".format(id))
 
-    cur.commit()
+    conn.commit()
 
     conn.close()
 
