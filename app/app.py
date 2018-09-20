@@ -1,19 +1,26 @@
 from functools import wraps
 from flask import (Flask, flash, redirect, render_template, request,
                    session, url_for)
-from app.models import cur, conn
+from app.models import connect
+import psycopg2
+from app.models.connect import cur as cur, conn as conn
 from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 
 app = Flask(__name__)
 
-def create_cur():
-    return conn.cursor()
 
 @app.route('/')
 def index():
-    create_cur()
-    cur.execute("SELECT * FROM articles")
+    connect()
+    try:
+        cur.execute("SELECT * FROM articles")
+    except psycopg2.ProgrammingError as exc:
+        print(exc.message)
+        conn.rollback()
+    except psycopg2.InterfaceError as exc:
+        print(exc.message)
+        connect()
 
     articles = cur.fetchall()
     return render_template('index.html', articles=articles)
@@ -26,10 +33,15 @@ def about():
 
 @app.route('/articles')
 def articles():
-    create_cur()
-    result = cur.execute("SELECT * FROM articles")
-
-    articles = cur.fetchall()
+    try:
+        result = cur.execute("SELECT * FROM articles")
+        articles = cur.fetchall()
+    except psycopg2.ProgrammingError as exc:
+        print(exc.message)
+        conn.rollback()
+    except psycopg2.InterfaceError as exc:
+        print(exc.message)
+        connect()
 
     if result:
         return render_template('articles.html', articles=articles)
@@ -40,7 +52,6 @@ def articles():
 
 @app.route('/article/<string:id>/', methods=['GET'])
 def article(id):
-    create_cur()
     cur.execute("SELECT * FROM articles WHERE id ={}".format(id))
 
     article = cur.fetchone()
@@ -62,18 +73,24 @@ class RegisterForm(Form):
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
-        create_cur()
         name = form.name.data
         email = form.email.data
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
-        cur.execute(
-            "INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)",
-            (name,
-             email,
-             username,
-             password))
+        try:
+            cur.execute(
+                "INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)",
+                (name,
+                 email,
+                 username,
+                 password))
+        except psycopg2.ProgrammingError as exc:
+            print(exc.message)
+            conn.rollback()
+        except psycopg2.InterfaceError as exc:
+            print(exc.message)
+            connect()
 
         # Commit to DB
         conn.commit()
@@ -94,8 +111,15 @@ def login():
         password_candidate = request.form['password']
 
         # Get user by username
-        result = cur.execute(
-            "SELECT * FROM users WHERE username = %s",[username])
+        try:
+            result = cur.execute(
+                "SELECT * FROM users WHERE username = %s",[username])
+        except psycopg2.ProgrammingError as exc:
+            print(exc.message)
+            conn.rollback()
+        except psycopg2.InterfaceError as exc:
+            print(exc.message)
+            connect()
 
         if result:
             # Get stored hash
@@ -105,7 +129,6 @@ def login():
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
                 # Password and username matches
-                create_cur()
                 session['logged_in'] = True
                 session['username'] = username
 
@@ -148,7 +171,6 @@ def logout():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
-    create_cur()
     result = cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
@@ -169,18 +191,24 @@ class ArticleForm(Form):
 @app.route('/add_article', methods=['GET', 'POST'])
 @is_logged_in
 def add_article():
-    create_cur()
     form = ArticleForm(request.form)
     if request.method == 'POST' and form.validate():
         title = form.title.data
         body = form.body.data
 
         # Create cursor
-        cur.execute(
-            "INSERT INTO articles(title, author, body) VALUES(%s, %s, %s);",
-            (title,
-             session['username'],
-             body))
+        try:
+            cur.execute(
+                "INSERT INTO articles(title, author, body) VALUES(%s, %s, %s);",
+                (title,
+                 session['username'],
+                 body))
+        except psycopg2.ProgrammingError as exc:
+            print(exc.message)
+            conn.rollback()
+        except psycopg2.InterfaceError as exc:
+            print(exc.message)
+            connect()
 
         # Commit to DB
         conn.commit()
@@ -194,7 +222,6 @@ def add_article():
 @app.route('/edit_article/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_article(id):
-    create_cur()
     cur.execute("SELECT * FROM articles WHERE id = {}".format(id))
 
     article = cur.fetchone()
@@ -208,9 +235,16 @@ def edit_article(id):
         title = request.form['title']
         body = request.form['body']
 
-        cur.execute(
-            "UPDATE articles SET title={}, body={} WHERE id={}".format(
-                title, body, id))
+        try:
+            cur.execute(
+                "UPDATE articles SET title={}, body={} WHERE id={}".format(
+                    title, body, id))
+        except psycopg2.ProgrammingError as exc:
+            print(exc.message)
+            conn.rollback()
+        except psycopg2.InterfaceError as exc:
+            print(exc.message)
+            connect()
 
         # Commit to DB
         conn.commit()
@@ -224,8 +258,14 @@ def edit_article(id):
 @app.route('/delete_article', methods=['POST'])
 @is_logged_in
 def delete_article(id):
-    create_cur()
-    cur.execute("DELETE FROM articles WHERE id = {}".format(id))
+    try:
+        cur.execute("DELETE FROM articles WHERE id = {}".format(id))
+    except psycopg2.ProgrammingError as exc:
+        print(exc.message)
+        conn.rollback()
+    except psycopg2.InterfaceError as exc:
+        print(exc.message)
+        connect()
 
     conn.commit()
 
