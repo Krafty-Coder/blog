@@ -1,18 +1,14 @@
 from functools import wraps
 from flask import (Flask, flash, redirect, render_template, request,
                    session, url_for)
+from app.models import connect
 import psycopg2
+from app.models import cur, conn
 from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 
-from app.models import Models
-
 app = Flask(__name__)
 
-connect = Models()
-connect = connect.connect()
-cur = connect.cur
-conn = connect.conn
 
 @app.route('/')
 def index():
