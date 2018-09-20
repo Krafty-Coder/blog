@@ -12,7 +12,6 @@ def create_cur():
 
 @app.route('/')
 def index():
-    create_cur()
     cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
