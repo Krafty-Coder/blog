@@ -12,6 +12,7 @@ def create_cur():
 
 @app.route('/')
 def index():
+    create_cur()
     cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
@@ -28,6 +29,7 @@ def about():
 
 @app.route('/articles')
 def articles():
+    create_cur()
     result = cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
@@ -44,6 +46,7 @@ def articles():
 
 @app.route('/article/<string:id>/', methods=['GET'])
 def article(id):
+    create_cur()
     cur.execute("SELECT * FROM articles WHERE id ={}".format(id))
 
     article = cur.fetchone()
@@ -66,6 +69,7 @@ class RegisterForm(Form):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    create_cur()
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
         name = form.name.data
@@ -82,6 +86,7 @@ def register():
 
         # Commit to DB
         conn.commit()
+        cur.close()
 
         flash('You are now registered and can log in', 'success')
 
@@ -93,6 +98,7 @@ def register():
 # User Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    create_cur()
     if request.method == 'POST':
         # GEt form values
         username = request.form['username']
@@ -155,6 +161,7 @@ def logout():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
+    create_cur()
     result = cur.execute("SELECT * FROM articles")
 
     articles = cur.fetchall()
@@ -177,6 +184,7 @@ class ArticleForm(Form):
 @app.route('/add_article', methods=['GET', 'POST'])
 @is_logged_in
 def add_article():
+    create_cur()
     form = ArticleForm(request.form)
     if request.method == 'POST' and form.validate():
         title = form.title.data
@@ -204,6 +212,7 @@ def add_article():
 @app.route('/edit_article/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_article(id):
+    create_cur()
     cur.execute("SELECT * FROM articles WHERE id = {}".format(id))
 
     article = cur.fetchone()
@@ -236,6 +245,7 @@ def edit_article(id):
 @app.route('/delete_article', methods=['POST'])
 @is_logged_in
 def delete_article(id):
+    create_cur()
     cur.execute("DELETE FROM articles WHERE id = {}".format(id))
 
     conn.commit()
