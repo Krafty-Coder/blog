@@ -6,7 +6,6 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 
 app = Flask(__name__)
-conn = conn(app)
 
 def create_cur():
     return conn.cursor()
