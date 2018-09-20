@@ -29,11 +29,12 @@ def articles():
 
     articles = cur.fetchall()
 
-    conn.close()
 
     if result > 0:
+        conn.close()
         return render_template('articles.html', articles=articles)
     else:
+        conn.close()
         msg = 'No article found, please add article to view them here'
         return render_template('articles.html', msg=msg)
 
@@ -78,9 +79,6 @@ def register():
 
         # Commit to DB
         cur.commit()
-
-        # Close Connection
-        conn.close()
 
         flash('You are now registered and can log in', 'success')
 
