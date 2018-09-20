@@ -82,8 +82,8 @@ def register():
         # Commit to DB
         conn.commit()
 
-        flash('You are now registered and can log in', 'success')
-
+        flash('{} You are now registered and can log in'.format(username), 'success')
+        conn.close()
         return redirect(url_for('index'))
 
     return render_template('register.html', form=form)
