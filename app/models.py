@@ -14,8 +14,9 @@ cur.execute('''CREATE TABLE IF NOT EXISTS articles(
 
 cur.execute('''CREATE TABLE IF NOT EXISTS users(
     id serial PRIMARY KEY,
-    username varchar (50) NOT NULL,
+    name varchar (50) NOT NULL,
     email varchar (100) NOT NULL,
+    username varchar (50) NOT NULL,
     password varchar (100) NOT NULL,
     password_confirmation varchar (100) NOT NULL,
     timestamp timestamp default current_timestamp
