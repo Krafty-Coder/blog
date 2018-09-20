@@ -98,12 +98,10 @@ def login():
         password_candidate = request.form['password']
 
         # Get user by username
-        create_cur()
         result = cur.execute(
             "SELECT * FROM users WHERE username = %s",[username])
 
         if result:
-            create_cur()
             # Get stored hash
             data = cur.fetchone()
             password = data['password']
