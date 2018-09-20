@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import (Flask, flash, redirect, render_template, request,
                    session, url_for)
-from app.models import cur
+from app.models import cur, conn
 from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 
@@ -13,7 +13,7 @@ def index():
 
     articles = cur.fetchall()
 
-    cur.close()
+    conn.close()
 
     return render_template('index.html', articles=articles)
 
@@ -29,7 +29,7 @@ def articles():
 
     articles = cur.fetchall()
 
-    cur.close()
+    conn.close()
 
     if result > 0:
         return render_template('articles.html', articles=articles)
@@ -44,7 +44,7 @@ def article(id):
 
     article = cur.fetchone()
 
-    cur.close()
+    conn.close()
 
     return render_template('article.html', article=article)
 
@@ -80,7 +80,7 @@ def register():
         cur.commit()
 
         # Close Connection
-        cur.close()
+        conn.close()
 
         flash('You are now registered and can log in', 'success')
 
@@ -108,7 +108,7 @@ def login():
             password = data['password']
 
             # Compare Passwords
-            cur.close()
+            conn.close()
             if sha256_crypt.verify(password_candidate, password):
                 # Password and username matches
                 session['logged_in'] = True
@@ -157,7 +157,7 @@ def dashboard():
 
     articles = cur.fetchall()
 
-    cur.close()
+    conn.close()
 
     if result > 0:
         return render_template('dashboard.html', articles=articles)
@@ -191,7 +191,7 @@ def add_article():
         cur.commit()
 
         # close connection
-        cur.close()
+        conn.close()
 
         flash('Article Created successfully', 'success')
         return redirect(url_for('dashboard'))
@@ -223,7 +223,7 @@ def edit_article(id):
         cur.commit()
 
         # close connection
-        cur.close()
+        conn.close()
 
         flash('Article Updated successfully', 'success')
         return redirect(url_for('dashboard'))
@@ -238,7 +238,7 @@ def delete_article(id):
 
     cur.commit()
 
-    cur.close()
+    conn.close()
 
 
 if __name__ == '__main__':
