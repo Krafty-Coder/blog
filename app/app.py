@@ -116,7 +116,6 @@ def login():
             password = data['password']
 
             # Compare Passwords
-            cur.close()
             if sha256_crypt.verify(password_candidate, password):
                 # Password and username matches
                 session['logged_in'] = True
