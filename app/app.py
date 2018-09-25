@@ -18,10 +18,10 @@ def index():
     try:
         cur.execute("SELECT * FROM articles")
     except psycopg2.ProgrammingError as exc:
-        print(exc.message)
+        print(exc)
         conn.rollback()
     except psycopg2.InterfaceError as exc:
-        print(exc.message)
+        print(exc)
         conn
 
     articles = cur.fetchall()
@@ -39,10 +39,10 @@ def articles():
         result = cur.execute("SELECT * FROM articles")
         articles = cur.fetchall()
     except psycopg2.ProgrammingError as exc:
-        print(exc.message)
+        print(exc)
         conn.rollback()
     except psycopg2.InterfaceError as exc:
-        print(exc.message)
+        print(exc)
         conn
 
     if result:
@@ -89,10 +89,10 @@ def register():
                  password))
             conn.commit()
         except psycopg2.ProgrammingError as exc:
-            print(exc.message)
+            print(exc)
             conn.rollback()
         except psycopg2.InterfaceError as exc:
-            print(exc.message)
+            print(exc)
             conn
 
         # Commit to DB
@@ -115,14 +115,15 @@ def login():
 
         # Get user by username
         try:
+            conn
             result = cur.execute(
                 "SELECT * FROM users WHERE username = {}".format(username))
         except psycopg2.ProgrammingError as exc:
-            print(exc.message)
+            print(exc)
             conn.rollback()
             conn
         except psycopg2.InterfaceError as exc:
-            print(exc.message)
+            print(exc)
 
         if result:
             # Get stored hash
@@ -208,10 +209,10 @@ def add_article():
                  body))
             conn.commit()
         except psycopg2.OperationlError as exc:
-            print(exc.message)
+            print(exc)
             conn.rollback()
         except psycopg2.InterfaceError as exc:
-            print(exc.message)
+            print(exc)
             conn
 
         # Commit to DB
@@ -244,10 +245,10 @@ def edit_article(id):
                 "UPDATE articles SET title={}, body={} WHERE id={}".format(
                     title, body, id))
         except psycopg2.OperationlError as exc:
-            print(exc.message)
+            print(exc)
             conn.rollback()
         except psycopg2.InterfaceError as exc:
-            print(exc.message)
+            print(exc)
             conn
 
         # Commit to DB
@@ -265,7 +266,7 @@ def delete_article(id):
     try:
         cur.execute("DELETE FROM articles WHERE id = {}".format(id))
     except psycopg2.OperationlError as exc:
-        print(exc.message)
+        print(exc)
         conn.rollback()
         conn
         cur
