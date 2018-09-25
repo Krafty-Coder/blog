@@ -122,6 +122,8 @@ def login():
             print(exc)
             conn.rollback()
             conn
+            result = cur.execute(
+                "SELECT * FROM users WHERE username = {}".format(username))
         except psycopg2.InterfaceError as exc:
             print(exc)
 
