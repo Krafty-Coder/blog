@@ -117,7 +117,7 @@ def login():
         try:
             conn
             result = cur.execute(
-                "SELECT * FROM users WHERE username = {}".format(username))
+                "SELECT * FROM users WHERE {} = username".format(username))
         except psycopg2.ProgrammingError as exc:
             print(exc)
             conn.rollback()
