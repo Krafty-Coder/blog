@@ -5,7 +5,6 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 import psycopg2
 
-from app.models import conn
 from app.models import cur, conn
 
 app = Flask(__name__)
@@ -88,6 +87,7 @@ def register():
                  email,
                  username,
                  password))
+            conn.commit()
         except psycopg2.ProgrammingError as exc:
             print(exc.message)
             conn.rollback()
