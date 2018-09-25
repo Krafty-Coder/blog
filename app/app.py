@@ -116,13 +116,13 @@ def login():
         # Get user by username
         try:
             result = cur.execute(
-                "SELECT * FROM users WHERE username = %s",[username])
+                "SELECT * FROM users WHERE username = {}".format(username))
         except psycopg2.ProgrammingError as exc:
             print(exc.message)
             conn.rollback()
+            conn
         except psycopg2.InterfaceError as exc:
             print(exc.message)
-            conn
 
         if result:
             # Get stored hash
@@ -206,6 +206,7 @@ def add_article():
                 (title,
                  session['username'],
                  body))
+            conn.commit()
         except psycopg2.OperationlError as exc:
             print(exc.message)
             conn.rollback()
