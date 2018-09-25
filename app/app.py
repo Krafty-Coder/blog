@@ -5,15 +5,17 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 import psycopg2
 
-from app.models import connect
+from app.models import conn
 from app.models import cur, conn
 
 app = Flask(__name__)
+conn = conn()
+cur = cur()
 
 
 @app.route('/')
 def index():
-    connect()
+    conn
     try:
         cur.execute("SELECT * FROM articles")
     except psycopg2.ProgrammingError as exc:
@@ -21,7 +23,7 @@ def index():
         conn.rollback()
     except psycopg2.InterfaceError as exc:
         print(exc.message)
-        connect()
+        conn
 
     articles = cur.fetchall()
     return render_template('index.html', articles=articles)
@@ -42,7 +44,7 @@ def articles():
         conn.rollback()
     except psycopg2.InterfaceError as exc:
         print(exc.message)
-        connect()
+        conn
 
     if result:
         return render_template('articles.html', articles=articles)
@@ -91,7 +93,7 @@ def register():
             conn.rollback()
         except psycopg2.InterfaceError as exc:
             print(exc.message)
-            connect()
+            conn
 
         # Commit to DB
         conn.commit()
@@ -120,7 +122,7 @@ def login():
             conn.rollback()
         except psycopg2.InterfaceError as exc:
             print(exc.message)
-            connect()
+            conn
 
         if result:
             # Get stored hash
@@ -204,12 +206,12 @@ def add_article():
                 (title,
                  session['username'],
                  body))
-        except psycopg2.ProgrammingError as exc:
+        except psycopg2.OperationlError as exc:
             print(exc.message)
             conn.rollback()
         except psycopg2.InterfaceError as exc:
             print(exc.message)
-            connect()
+            conn
 
         # Commit to DB
         conn.commit()
@@ -240,12 +242,12 @@ def edit_article(id):
             cur.execute(
                 "UPDATE articles SET title={}, body={} WHERE id={}".format(
                     title, body, id))
-        except psycopg2.ProgrammingError as exc:
+        except psycopg2.OperationlError as exc:
             print(exc.message)
             conn.rollback()
         except psycopg2.InterfaceError as exc:
             print(exc.message)
-            connect()
+            conn
 
         # Commit to DB
         conn.commit()
@@ -261,12 +263,11 @@ def edit_article(id):
 def delete_article(id):
     try:
         cur.execute("DELETE FROM articles WHERE id = {}".format(id))
-    except psycopg2.ProgrammingError as exc:
+    except psycopg2.OperationlError as exc:
         print(exc.message)
         conn.rollback()
-    except psycopg2.InterfaceError as exc:
-        print(exc.message)
-        connect()
+        conn
+        cur
 
     conn.commit()
 
