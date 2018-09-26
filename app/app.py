@@ -75,19 +75,17 @@ class RegisterForm(Form):
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
-        name = form.name.data
-        email = form.email.data
-        username = form.username.data
-        password = sha256_crypt.encrypt(str(form.password.data))
+        name = str(form.name.data)
+        email = str(form.email.data)
+        username = str(form.username.data)
+        password = str(sha256_crypt.encrypt(str(form.password.data)))
 
         try:
             cur.execute(
-                "INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)",
-                (name,
-                 email,
-                 username,
-                 password))
+                "INSERT INTO users(name, email, username, password) VALUES(%(str)s, %(str)s, %(str)s, %(str)s)",(name,email,username,password,))
             conn.commit()
+            users = cur.execute("SELECT * FROM user")
+            print(users)
         except psycopg2.ProgrammingError as exc:
             print(exc)
             conn.rollback()
@@ -117,7 +115,7 @@ def login():
         try:
             conn
             result = cur.execute(
-                "SELECT * FROM users WHERE {} = username".format(username))
+                "SELECT * FROM users WHERE username=%s", [username])
         except psycopg2.ProgrammingError as exc:
             print(exc)
             conn.rollback()
@@ -127,6 +125,8 @@ def login():
         except psycopg2.InterfaceError as exc:
             print(exc)
 
+        users = cur.execute("SELECT * FROM user")
+        print(users)
         if result:
             # Get stored hash
             data = cur.fetchone()

@@ -1,7 +1,13 @@
+import os
+
 import psycopg2
 
+dbname = os.environ.get('DB_NAME')
+dbuser = os.environ.get('DB_USER')
+dbpass = os.environ.get('DB_PASS')
+dbhost = os.environ.get('DB_HOST')
 def conn():
-    return psycopg2.connect("dbname=d49pt4ur37g33c user=oqrnhavmylzeql password=290ca06f7d3667c7ebeb2d89f1ed502ce9db4ff7d91d2fd4269e92f7052a2283 host=ec2-54-225-241-25.compute-1.amazonaws.com port=5432")  # Connecting to the database
+    return psycopg2.connect("dbname={} user={} password={} host={} port=5432".format(dbname, dbuser, dbpass, dbhost))  # Connecting to the database
 
 def cur():
     return conn().cursor()  # Activate connection using the cursor
