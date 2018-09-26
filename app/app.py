@@ -82,7 +82,7 @@ def register():
 
         try:
             cur.execute(
-                "INSERT INTO users(name, email, username, password) VALUES(%(str)s, %(str)s, %(str)s, %(str)s)",(name,email,username,password,))
+                "INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)",(name,email,username,password,))
             conn.commit()
             users = cur.execute("SELECT * FROM user")
             print(users)
