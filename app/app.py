@@ -30,9 +30,9 @@ def index():
     cur = conn.cursor()
     if result:
         articles = cur.fetchall()
+        return render_template('index.html', articles=articles)
     else:
-        non = None
-    return render_template('index.html', articles=articles)
+        return render_template('index.html')
 
 
 @app.route('/about')
