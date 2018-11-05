@@ -36,7 +36,7 @@ def about():
 @app.route('/articles')
 def articles():
     try:
-        result = cur.execute("SELECT * FROM articles")
+        cur.execute("""SELECT * FROM articles""")
         articles = cur.fetchall()
     except psycopg2.ProgrammingError as exc:
         print(exc)
@@ -45,7 +45,7 @@ def articles():
         print(exc)
         conn
 
-    if result:
+    if articles:
         return render_template('articles.html', articles=articles)
     else:
         msg = 'No article found, please add article to view them here'
@@ -210,7 +210,7 @@ def add_article():
                 "INSERT INTO articles(title, author, body) VALUES(%s, %s, %s);",
                 (title,
                  session['username'],
-                 body))
+                 body,))
             conn.commit()
         except psycopg2.OperationlError as exc:
             print(exc)

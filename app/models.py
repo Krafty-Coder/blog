@@ -12,7 +12,7 @@ queries = [
     '''
     CREATE TABLE IF NOT EXISTS articles(
     id serial PRIMARY KEY,
-    title varchar (50) NOT NULL,
+    title varchar (100) NOT NULL,
     author varchar (100) NOT NULL,
     body text NOT NULL,
     create_date timestamp default current_timestamp)
