@@ -25,7 +25,6 @@ def index():
         conn
 
     articles = cur.fetchall()
-    print(articles)
     return render_template('index.html', articles=articles)
 
 
@@ -81,26 +80,36 @@ def register():
         username = str(form.username.data)
         password = str(sha256_crypt.encrypt(str(form.password.data)))
 
-        try:
-            cur.execute(
-                """INSERT INTO users(name, email, username, password) VALUES(%s ,%s ,%s ,%s)""",
-                (name,email,username,password,))
+        cur.execute(
+                """SELECT * FROM users WHERE username = %s""", (username,))
+        data = cur.fetchone()
+        
+        if username == data[3] or email == data[2]:
+            message = "User already available"
+            flash("user {} already exists ".format(username), 'error')
+            conn.close()
+            return(redirect(url_for('register')))
+        else:
+            try:
+                cur.execute(
+                    """INSERT INTO users(name, email, username, password) VALUES(%s ,%s ,%s ,%s)""",
+                    (name,email,username,password,))
+                conn.commit()
+                users = cur.execute("SELECT * FROM user")
+                print(users)
+            except psycopg2.ProgrammingError as exc:
+                print(exc)
+                conn.rollback()
+            except psycopg2.InterfaceError as exc:
+                print(exc)
+                conn
+
+            # Commit to DB
             conn.commit()
-            users = cur.execute("SELECT * FROM user")
-            print(users)
-        except psycopg2.ProgrammingError as exc:
-            print(exc)
-            conn.rollback()
-        except psycopg2.InterfaceError as exc:
-            print(exc)
-            conn
 
-        # Commit to DB
-        conn.commit()
-
-        flash('{} You are now registered and can log in'.format(username), 'success')
-        conn.close()
-        return redirect(url_for('index'))
+            flash('{} You are now registered and can log in'.format(username), 'success')
+            conn.close()
+            return redirect(url_for('index'))
 
     return render_template('register.html', form=form)
 

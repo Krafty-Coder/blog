@@ -45,13 +45,14 @@ class Database():
         cur = self.create_connection().cursor()
         for query in queries:
             cur.execute(query)
+            self.conn.commit()
         passkey = os.environ.get('ADMIN_PASS')
         password = str(sha256_crypt.encrypt(passkey))
-        cur.execute(
-                    """INSERT INTO users (name, email, username, password)
-                    VALUES('krafty coder' ,'kraftycoder@gmail.com' ,'krafty-coder' ,%s);""",
-                    (password,))
-        self.conn.commit()
+        # cur.execute(
+        #             """INSERT INTO users (name, email, username, password)
+        #             VALUES('krafty coder' ,'kraftycoder@gmail.com' ,'krafty-coder' ,%s);""",
+        #             (password,))
+        # self.conn.commit()
         self.conn.close()
         return "Tables created successfully"
 
@@ -70,6 +71,7 @@ class Database():
 
 db_url = "dbname={} user={} password={} host={} port=5432".format(dbname, dbuser, dbpass, dbhost)
 db = Database(db_url)
+db.destroy_tables()
 db.create_tables()
 db.close_connection()
 
