@@ -129,11 +129,10 @@ def login():
             cur.execute(
                 """SELECT * FROM users WHERE username = %s""", (username,))
             data = cur.fetchone()
-            print(data)
 
-        if users != None:
+        if data != None:
             # Get stored hash
-            password = data['password']
+            password = data(4)
 
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):

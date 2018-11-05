@@ -1,17 +1,24 @@
 # Test file
 import unittest
-from flask import Flask
+import os
+
+import psycopg2
 import app
 from flaskext.mysql import MySQL
 
-app = Flask(__name__)
 
+dbhost = os.environ.get('DB_HOST')
+dbname = os.environ.get('DB_NAME')
+dbuser = os.environ.get('DB_USER')
+dbpass = os.environ.get('DB_PASS')
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'adminray'
 app.config['MYSQL_DB'] = 'myflaskapp'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
+conn = psycopg2.connect("dbname={} user={} password={} host={} port=5432".format(dbname, dbuser, dbpass, dbhost))  # Connecting to the database
+cur = conn.cursor()
 mysql = MySQL()
 mysql.init_app(app)
 
