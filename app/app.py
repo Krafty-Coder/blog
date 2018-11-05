@@ -85,25 +85,24 @@ def register():
         data = cur.fetchone()
 
         if data:
-            if username == data[3] or email == data[2]:
-                message = "User already available"
-                flash("user {} already exists ".format(username), 'error')
-                conn.close()
-                return(redirect(url_for('register')))
-            else:
-                try:
-                    cur.execute(
-                        """INSERT INTO users(name, email, username, password) VALUES(%s ,%s ,%s ,%s)""",
-                        (name,email,username,password,))
-                    conn.commit()
-                    users = cur.execute("SELECT * FROM user")
-                    print(users)
-                except psycopg2.ProgrammingError as exc:
-                    print(exc)
-                    conn.rollback()
-                except psycopg2.InterfaceError as exc:
-                    print(exc)
-                    conn
+            message = "User already available"
+            flash("user {} already exists ".format(username), 'error')
+            conn.close()
+            return(redirect(url_for('register')))
+        else:
+            try:
+                cur.execute(
+                    """INSERT INTO users(name, email, username, password) VALUES(%s ,%s ,%s ,%s)""",
+                    (name,email,username,password,))
+                conn.commit()
+                users = cur.execute("SELECT * FROM user")
+                print(users)
+            except psycopg2.ProgrammingError as exc:
+                print(exc)
+                conn.rollback()
+            except psycopg2.InterfaceError as exc:
+                print(exc)
+                conn
 
             # Commit to DB
             conn.commit()
