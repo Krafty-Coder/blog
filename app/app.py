@@ -5,9 +5,10 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 import psycopg2
 
-from app.models import db
+from app.models import Database, db_url
 
 app = Flask(__name__)
+db = Database(db_url)
 conn = db.create_connection()
 cur = conn.cursor()
 
@@ -24,6 +25,8 @@ def index():
         print(exc)
         conn
 
+    conn
+    cur = conn.cursor()
     articles = cur.fetchall()
     return render_template('index.html', articles=articles)
 
@@ -85,7 +88,6 @@ def register():
         data = cur.fetchone()
 
         if data:
-            message = "User already available"
             flash("user {} already exists ".format(username), 'error')
             conn.close()
             return(redirect(url_for('register')))
