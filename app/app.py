@@ -130,7 +130,7 @@ def login():
             users = cur.fetchall()
             print(users)
 
-        if result:
+        if result != None:
             # Get stored hash
             data = cur.fetchone()
             password = data['password']
