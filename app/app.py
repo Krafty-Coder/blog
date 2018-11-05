@@ -126,13 +126,13 @@ def login():
         except psycopg2.InterfaceError as exc:
             print(exc)
         finally:
-            cur.execute("""SELECT * FROM users""")
-            users = cur.fetchall()
-            print(users)
+            cur.execute(
+                """SELECT * FROM users WHERE username = %s""", (username,))
+            data = cur.fetchone()
+            print(data)
 
         if users != None:
             # Get stored hash
-            data = cur.fetchone()
             password = data['password']
 
             # Compare Passwords
