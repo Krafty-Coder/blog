@@ -16,6 +16,7 @@ cur = conn.cursor()
 @app.route('/')
 def index():
     conn
+    cur = conn.cursor()
     try:
         cur.execute("SELECT * FROM articles")
     except psycopg2.ProgrammingError as exc:
