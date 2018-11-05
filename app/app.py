@@ -132,7 +132,7 @@ def login():
 
         if data != None:
             # Get stored hash
-            password = data(4)
+            password = data[4]
 
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
