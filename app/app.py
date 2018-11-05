@@ -5,11 +5,11 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 import psycopg2
 
-from app.models import cur, conn
+from app.models import db
 
 app = Flask(__name__)
-conn = conn()
-cur = cur()
+conn = db.create_connection()
+cur = conn.cursor()
 
 
 @app.route('/')
