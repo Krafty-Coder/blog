@@ -25,6 +25,7 @@ def index():
         conn
 
     articles = cur.fetchall()
+    print(articles)
     return render_template('index.html', articles=articles)
 
 
