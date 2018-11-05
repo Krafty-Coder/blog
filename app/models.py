@@ -71,7 +71,6 @@ class Database():
 
 db_url = "dbname={} user={} password={} host={} port=5432".format(dbname, dbuser, dbpass, dbhost)
 db = Database(db_url)
-db.destroy_tables()
 db.create_tables()
 db.close_connection()
 
