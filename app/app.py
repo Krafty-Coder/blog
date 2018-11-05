@@ -18,7 +18,7 @@ def index():
     conn
     cur = conn.cursor()
     try:
-        cur.execute("SELECT * FROM articles")
+        result = cur.execute("SELECT * FROM articles")
     except psycopg2.ProgrammingError as exc:
         print(exc)
         conn.rollback()
@@ -28,7 +28,10 @@ def index():
 
     conn
     cur = conn.cursor()
-    articles = cur.fetchall()
+    if result:
+        articles = cur.fetchall()
+    else:
+        non = None
     return render_template('index.html', articles=articles)
 
 
