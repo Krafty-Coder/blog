@@ -91,6 +91,7 @@ def register():
             return(redirect(url_for('register')))
         else:
             try:
+                conn
                 cur.execute(
                     """INSERT INTO users(name, email, username, password) VALUES(%s ,%s ,%s ,%s)""",
                     (name,email,username,password,))
