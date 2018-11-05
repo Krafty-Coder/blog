@@ -116,18 +116,20 @@ def login():
         try:
             conn
             result = cur.execute(
-                "SELECT * FROM users WHERE username=%s", [username])
+                """SELECT * FROM users WHERE username=%s""", (username,))
         except psycopg2.ProgrammingError as exc:
             print(exc)
             conn.rollback()
             conn
             result = cur.execute(
-                "SELECT * FROM users WHERE username = {}".format(username))
+                """SELECT * FROM users WHERE username = {}""".format(username))
         except psycopg2.InterfaceError as exc:
             print(exc)
+        finally:
+            cur.execute("""SELECT * FROM users""")
+            users = cur.fetchall()
+            print(users)
 
-        users = cur.execute("SELECT * FROM user")
-        print(users)
         if result:
             # Get stored hash
             data = cur.fetchone()
