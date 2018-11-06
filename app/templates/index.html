@@ -18,12 +18,12 @@
 <section class="cards-wrapper">
   {% for article in articles %}
   <div class="card-grid-space">
-    <div class="num">{{article.id}}</div>
-    <a class="card" href="article/{{article[0]}}" style="--bg-img: url(https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&resize_w=1500&url=https://codetheweb.blog/assets/img/posts/html-syntax/cover.jpg)">
+    <div class="num">{{article["id"]}}</div>
+    <a class="card" href="article/{{article['id']}}" style="--bg-img: url(https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&resize_w=1500&url=https://codetheweb.blog/assets/img/posts/html-syntax/cover.jpg)">
       <div>
-        <h1>{{article[1]}}</h1>
-        <p>{{article[3][0:60]}}</p>
-        <div class="date">{{article[4]}}</div>
+        <h1>{{article['title']}}</h1>
+        <p>{{article['body'][0:60]}}</p>
+        <div class="date">{{article['create_date']}}</div>
         <div class="tags">
           <div class="tag">Python</div>
         </div>
