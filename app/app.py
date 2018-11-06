@@ -20,7 +20,8 @@ def index():
     conn
     cur = conn.cursor()
     try:
-        result = cur.execute("SELECT * FROM articles")
+        article = ArticleModel()
+        articles = article.get()
     except psycopg2.ProgrammingError as exc:
         print(exc)
         conn.rollback()
@@ -45,8 +46,8 @@ def about():
 @app.route('/articles')
 def articles():
     try:
-        cur.execute("""SELECT * FROM articles""")
-        articles = cur.fetchall()
+        article = ArticleModel()
+        articles = article.get()
     except psycopg2.ProgrammingError as exc:
         print(exc)
         conn.rollback()
@@ -100,7 +101,8 @@ def register():
         else:
             try:
                 conn
-                user = User_Model(name, email, username, password)
+                user = User_Model()
+                user.post(name, email, username, password)
                 user.save()
                 users = user.get()
                 print(users)
@@ -196,10 +198,8 @@ def logout():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
-    result = cur.execute("SELECT * FROM articles")
-
-    articles = cur.fetchall()
-
+    article = ArticleModel()
+    articles = article.get()
     if result:
         return render_template('dashboard.html', articles=articles)
     else:
