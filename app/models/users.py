@@ -10,7 +10,7 @@ class User_Model(Database):
         self.db.create_tables()
         self.cur = self.conn.cursor()
 
-    def post(self, name=None, email=None, username=None, password=None)
+    def post(self, name=None, email=None, username=None, password=None):
         self.name = name
         self.email = email
         self.username = username
