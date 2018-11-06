@@ -27,13 +27,13 @@ class ArticleModel():
         articles = self.cur.fetchall()
         available_articles = []
         for i in articles:
-            articles = list(i)
+            articles_list = list(i)
             article = {}
-            article["id"] = users_list[0]
-            article["title"] = users_list[1]
-            article["author"] = users_list[2]
-            article["body"] = users_list[3]
-            article["create_date"] = users_list[4]
+            article["id"] = articles_list[0]
+            article["title"] = articles_list[1]
+            article["author"] = articles_list[2]
+            article["body"] = articles_list[3]
+            article["create_date"] = articles_list[4]
             available_articles.append(article)
         return available_articles
 
