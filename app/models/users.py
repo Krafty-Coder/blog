@@ -1,4 +1,4 @@
-from dbInit import Database, db_url
+from ..dbInit import Database, db_url
 
 class User_Model(Database):
 

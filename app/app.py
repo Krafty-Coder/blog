@@ -5,9 +5,9 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 import psycopg2
 
-from app.dbInit import Database, db_url
-from models.users import User_Model
-from models.articles import ArticleModel
+from .dbInit import Database, db_url
+from .models.users import User_Model
+from .models.articles import ArticleModel
 
 app = Flask(__name__)
 db = Database(db_url)
