@@ -5,7 +5,9 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
 import psycopg2
 
-from app.models import Database, db_url
+from app.dbInit import Database, db_url
+from models.users import User_Model
+from models.articles import ArticleModel
 
 app = Flask(__name__)
 db = Database(db_url)
@@ -98,11 +100,9 @@ def register():
         else:
             try:
                 conn
-                cur.execute(
-                    """INSERT INTO users(name, email, username, password) VALUES(%s ,%s ,%s ,%s)""",
-                    (name,email,username,password,))
-                conn.commit()
-                users = cur.execute("SELECT * FROM user")
+                user = User_Model(name, email, username, password)
+                user.save()
+                users = user.get()
                 print(users)
             except psycopg2.ProgrammingError as exc:
                 print(exc)
