@@ -31,8 +31,7 @@ def index():
 
     conn
     cur = conn.cursor()
-    if result:
-        articles = cur.fetchall()
+    if articles:
         return render_template('index.html', articles=articles)
     else:
         return render_template('index.html')
@@ -200,7 +199,7 @@ def logout():
 def dashboard():
     article = ArticleModel()
     articles = article.get()
-    if result:
+    if articles:
         return render_template('dashboard.html', articles=articles)
     else:
         msg = 'No article found, please add article to view them here'
