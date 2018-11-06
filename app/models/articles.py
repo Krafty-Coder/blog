@@ -24,7 +24,7 @@ class ArticleModel():
     def get(self):
         query = "SELECT * FROM articles"
         self.cur.execute(query)
-        aricles = self.cur.fetchall()
+        articles = self.cur.fetchall()
         available_articles = []
         for i in articles:
             articles = list(i)
