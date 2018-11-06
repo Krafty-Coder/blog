@@ -4,17 +4,20 @@ class User_Model(Database):
 
     '''Initializes a new user object'''
 
-    def __init__(self, name=None, email=None, username=None, password=None):
-        self.name = name
-        self.email = email
-        self.username = username
-        self.password = password
+    def __init__(self):
         self.db = Database(db_url)
         self.conn = self.db.create_connection()
         self.db.create_tables()
         self.cur = self.conn.cursor()
 
+    def post(self, name=None, email=None, username=None, password=None)
+        self.name = name
+        self.email = email
+        self.username = username
+        self.password = password
+
     def save(self):
+        self.post()
         self.cur.execute(
             "INSERT INTO users(name,email,username,password) VALUES(%s,%s,%s)", (
                 self.name, self.email, self.username, self.password,)
