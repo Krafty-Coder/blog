@@ -1,61 +1,56 @@
 # Test file
 import unittest
+from passlib.hash import sha256_crypt
 import os
 
 import psycopg2
 import app
-from flaskext.mysql import MySQL
+from app.models.users import User_Model
+from app import create_app
+from flask import Flask
+from app.dbInit import Database, db_url
 
 
-dbhost = os.environ.get('DB_HOST')
-dbname = os.environ.get('DB_NAME')
-dbuser = os.environ.get('DB_USER')
-dbpass = os.environ.get('DB_PASS')
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'adminray'
-app.config['MYSQL_DB'] = 'myflaskapp'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-
-conn = psycopg2.connect("dbname={} user={} password={} host={} port=5432".format(dbname, dbuser, dbpass, dbhost))  # Connecting to the database
+app = Flask(__name__)
+db = Database(db_url)
+conn = db.create_connection()
 cur = conn.cursor()
-mysql = MySQL()
-mysql.init_app(app)
 
 
 class FlaskTestAppCases(unittest.TestCase):
-    mysql = MySQL()
-    mysql.init_app(app)
 
     def setUp(self):
-        self.cur = mysql.connection.cursor()
-        self.cur.execute(
-            "INSERT INTO users(name, email, username, password) VALUES('admin',\
-            'admin@gmail.com', 'admin', 'adminpass')")
+        self.db = Database(db_url)
+        self.conn = db.create_connection()
+        self.db.create_tables()
+        self.cur = conn.cursor()
+        self.app = create_app(config_name="testing")
+        self.tester = self.app.test_client()
+        self.user = User_Model()
+        password = str(sha256_crypt.encrypt(str("adminpass")))
+        self.user.post('admin','admin@gmail.com','admin',password)
+        self.user.save()
 
         # Commit to DB
-        mysql.connection.commit()
-
+        self.conn.commit()
         # Close Connection
+        self.conn.close()
 
     def tearDown(self):
-        return self.cur.drop
+        return self.db.destroy_tables()
 
     #Ensure that Flask was set up correctly
     def test_index(self):
-        tester = app.test_client(self)
-        response = tester.get('/login', content_type='html/text')
+        response = self.tester.get('/login', content_type='html/text')
         self.assertEqual(response.status_code, 200)
 
     def test_login_page_loads(self):
-        tester = app.test_client(self)
-        response = tester.get('/login', content_type='html/text')
+        response = self.tester.get('/login', content_type='html/text')
         self.assertTrue(b'Login' in response.data)
 
     # Test for login working correctly with the right credentials
     def test_correct_login(self):
-        tester = app.test_client(self)
-        response = tester.post(
+        response = self.tester.post(
             '/login',
             data=dict(username="admin", password="adminpass"),
             follow_redirects=True
@@ -64,10 +59,10 @@ class FlaskTestAppCases(unittest.TestCase):
 
     # Test for login working correctly with the wrong credentials
     def test_incorrect_login(self):
-        tester = app.test_client(self)
-        response = tester.post(
+        password = str(sha256_crypt.hash(str("wrongagain")))
+        response = self.tester.post(
             '/login',
-            data=dict(username="wrong", password="wrongagain"),
+            data=dict(username="wrong", password="adminpass"),
             follow_redirects=True
         )
         self.assertIn(b'Username not found', response.data)
@@ -75,31 +70,28 @@ class FlaskTestAppCases(unittest.TestCase):
 
     # Test for logout working perfectly
     def test_correct_logout(self):
-        tester = app.test_client(self)
-        tester.post(
+        self.tester.post(
             '/login',
-            data=dict(username="admin", password="admin"),
+            data=dict(username="admin", password="adminpass"),
             follow_redirects=True
         )
-        response = tester.get('/logout', follow_redirects=True)
+        response = self.tester.get('/logout', follow_redirects=True)
         self.assertIn(b'You have successfully logged out', response.data)
 
 
     def test_dashboard_requires_login(self):
-        tester = app.test_client(self)
-        tester.post('/dashboard', follow_redirects=True)
-        response = tester.get('/login', follow_redirects=True)
-        self.assertTrue(b'Unauthorised, Please log in to continue to this page', response.data)
+        self.tester.post('/dashboard', follow_redirects=True)
+        response = self.tester.get('/login', follow_redirects=True)
+        self.assertTrue(b'Password or username incorrect, Invalid login', response.data)
 
     # Show articles on the main page
     def test_articles_display_on_dashboard(self):
-        tester = app.test_client(self)
-        response = tester.post(
+        response = self.tester.post(
             '/login',
-            data=dict(username="admin", password="admin"),
+            data=dict(username="admin", password="adminpass"),
             follow_redirects=True
         )
-        self.assertIn(b'Dashboard Welcome admin', response.data)
+        self.assertIn(b'Welcome admin', response.data)
 
 
 if __name__ == '__main__':
