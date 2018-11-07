@@ -8,9 +8,9 @@ import app
 from app.models.users import User_Model
 from app import create_app
 from flask import Flask
-from app.dbInit import Database, db_url
+from app.dbInit import Database
 
-
+db_url = os.environ.get('DATABASE_URL')
 app = Flask(__name__)
 db = Database(db_url)
 conn = db.create_connection()
