@@ -1,22 +1,23 @@
-env:
-  global:
-    - CC_TEST_REPORTER_ID=c74ae50767ce5179663f4c28ea737e2959ceffaa457252c86f1e7efbfb54fec1
 language: python
 python:
   - "3.6"
-    # command to install dependencies
+cache: pip
+services:
+  - postgresql
 install:
   - pip3 install -r requirements.txt
-    # command to run tests
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+  - psql -c 'create database test_db;' -U postgres
 script:
+<<<<<<< HEAD
   - python3 test.py
   - py.test coveralls/tests.py --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing
+=======
+  - python test.py --cov=app/app.py -v 
+>>>>>>> 7ff4e5d807c17b619f0c1db6b54532e21d377da3
 after_script:
   - coveralls
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-
-
+  - coveralls 
+after_success:
+  - coveralls
