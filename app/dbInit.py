@@ -30,8 +30,8 @@ queries = [
     ]
 
 class Database():
-    def __init__(self, dburl):
-        self.dburl = dburl
+    def __init__(self, db_url):
+        self.dburl = db_url
         self.conn = None
 
     def create_connection(self):
@@ -72,6 +72,6 @@ class Database():
 
 db_url = "dbname={} user={} password={} host={} port={}".format(dbname, dbuser, dbpass, dbhost, dbport)
 db = Database(db_url)
-db.create_tables()
 db.close_connection()
+db.create_tables()
 
