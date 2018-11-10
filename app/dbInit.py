@@ -48,11 +48,7 @@ class Database():
             cur.execute(query)
             self.conn.commit()
         passkey = os.environ.get('ADMIN_PASS')
-<<<<<<< HEAD
         password = str(sha256_crypt.hash(str(passkey)))
-=======
-        password = str(sha256_crypt.hash(passkey))
->>>>>>> 7ff4e5d807c17b619f0c1db6b54532e21d377da3
         # cur.execute(
         #             """INSERT INTO users (name, email, username, password)
         #             VALUES('krafty coder' ,'kraftycoder@gmail.com' ,'krafty-coder' ,%s);""",
