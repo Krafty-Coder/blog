@@ -35,7 +35,6 @@ class Database():
         self.conn = psycopg2.connect(db_url)  # Connecting to the database
 
     def create_connection(self):
-        self.conn = psycopg2.connect(self.dburl)  # Connecting to the database
         self.conn.autocommit = True
         return self.conn
 
@@ -43,7 +42,7 @@ class Database():
         return self.conn.close()
 
     def create_tables(self):
-        cur = self.create_connection().cursor()
+        cur = self.conn.cursor()
         for query in queries:
             cur.execute(query)
             self.conn.commit()
