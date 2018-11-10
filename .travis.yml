@@ -14,7 +14,9 @@ before_script:
   - ./cc-test-reporter before-build
 script:
   - python3 test.py
+  - py.test coveralls/tests.py --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing
 after_script:
+  - coveralls
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 
