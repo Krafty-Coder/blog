@@ -10,16 +10,16 @@ class User_Model(Database):
         self.db.create_tables()
         self.cur = self.conn.cursor()
 
-    def post(self, name=None, email=None, username=None, password=None):
+    def post(self, name, email, username, password):
         self.name = name
         self.email = email
         self.username = username
         self.password = password
 
     def save(self):
-        self.post()
+        self.post(self.name,self.email,self.username,self.password)
         self.cur.execute(
-            "INSERT INTO users(name,email,username,password) VALUES(%s,%s,%s)", (
+            "INSERT INTO users(name,email,username,password) VALUES(%s,%s,%s,%s)", (
                 self.name, self.email, self.username, self.password,)
         )
         self.conn.commit()
@@ -31,7 +31,7 @@ class User_Model(Database):
         query = "SELECT * FROM users"
         self.cur.execute(query)
         users = self.cur.fetchall()
-        appusers = []
+        available_users = []
         for i in users:
             users_list = list(i)
             user = {}
@@ -41,5 +41,5 @@ class User_Model(Database):
             user["username"] = users_list[3]
             user["password"] = users_list[4]
             user["join_date"] = users_list[5]
-            appusers.append(user)
-        return appusers
+            available_users.append(user)
+        return available_users
