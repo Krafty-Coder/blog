@@ -32,7 +32,7 @@ queries = [
 class Database():
     def __init__(self, db_url):
         self.dburl = db_url
-        self.conn = None
+        self.conn = psycopg2.connect(self.dburl)  # Connecting to the database
 
     def create_connection(self):
         self.conn = psycopg2.connect(self.dburl)  # Connecting to the database
