@@ -13,8 +13,6 @@ script:
   - py.test coveralls/tests.py --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing
   - python test.py --cov=app/app.py -v 
 after_script:
-  - coveralls
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-  - coveralls 
 after_success:
   - coveralls

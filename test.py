@@ -18,15 +18,12 @@ dbhost = os.environ.get('DB_HOST')
 
 db_url = "dbname={} user={} password={} host={} port=5432".format(dbname, dbuser, dbpass, dbhost)
 app = Flask(__name__)
-db = Database(db_url)
-conn = db.create_connection()
-cur = conn.cursor()
 
 
 class FlaskTestAppCases(unittest.TestCase):
 
     def setUp(self):
-        self.db = Database(db_url)
+        self.db = Database("test_db")
         self.conn = db.create_connection()
         self.db.create_tables()
         self.cur = conn.cursor()
