@@ -53,7 +53,6 @@ class Database():
         #             VALUES('krafty coder' ,'kraftycoder@gmail.com' ,'krafty-coder' ,%s);""",
         #             (password,))
         # self.conn.commit()
-        self.conn.close()
         return "Tables created successfully"
 
     def destroy_tables(self):
@@ -71,6 +70,5 @@ class Database():
 
 db_url = "dbname={} user={} password={} host={} port={}".format(dbname, dbuser, dbpass, dbhost, dbport)
 db = Database(db_url)
-db.close_connection()
 db.create_tables()
 
