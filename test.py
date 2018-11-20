@@ -36,8 +36,6 @@ class FlaskTestAppCases(unittest.TestCase):
 
         # Commit to DB
         self.conn.commit()
-        # Close Connection
-        self.conn.close()
 
     def tearDown(self):
         return self.db.destroy_tables()
