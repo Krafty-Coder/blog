@@ -26,7 +26,7 @@ class FlaskTestAppCases(unittest.TestCase):
         self.db = Database(db_url)
         self.conn = self.db.create_connection()
         self.db.create_tables()
-        self.cur = conn.cursor()
+        self.cur = self.conn.cursor()
         self.app = create_app(config_name="testing")
         self.tester = self.app.test_client()
         self.user = User_Model()
