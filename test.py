@@ -24,7 +24,7 @@ class FlaskTestAppCases(unittest.TestCase):
 
     def setUp(self):
         self.db = Database(db_url)
-        self.conn = db.create_connection()
+        self.conn = self.db.create_connection()
         self.db.create_tables()
         self.cur = conn.cursor()
         self.app = create_app(config_name="testing")
