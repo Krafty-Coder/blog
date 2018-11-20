@@ -11,11 +11,6 @@ from flask import Flask
 from app.dbInit import Database
 
 
-dbname = os.environ.get('DB_NAME')
-dbuser = os.environ.get('DB_USER')
-dbpass = os.environ.get('DB_PASS')
-dbhost = os.environ.get('DB_HOST')
-
 db_url = "dbname={} user={} password={} host={} port=5432".format(dbname, dbuser, dbpass, dbhost)
 app = Flask(__name__)
 
