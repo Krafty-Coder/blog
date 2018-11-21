@@ -36,7 +36,6 @@ def index():
     else:
         return render_template('index.html')
 
-
 @app.route('/about')
 def about():
     return render_template('about.html')
@@ -118,7 +117,6 @@ def register():
             flash('{} You are now registered and can log in'.format(username), 'success')
             conn.close()
             return redirect(url_for('index'))
-
     return render_template('register.html', form=form)
 
 
@@ -292,6 +290,7 @@ def delete_article(id):
         cur
 
     conn.commit()
+
 
 
 if __name__ == '__main__':

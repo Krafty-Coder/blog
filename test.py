@@ -1,4 +1,5 @@
-# Test file
+import os
+import flask
 import unittest
 from passlib.hash import sha256_crypt
 import os
@@ -93,7 +94,6 @@ class FlaskTestAppCases(unittest.TestCase):
             follow_redirects=True
         )
         self.assertIn(b'Welcome admin', response.data)
-
 
 if __name__ == '__main__':
     unittest.main()
