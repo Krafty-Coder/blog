@@ -12,10 +12,11 @@ from flask import Flask
 from app.dbInit import Database
 
 
-dbname = os.environ.get('DB_NAME')
-dbuser = os.environ.get('DB_USER')
-dbpass = os.environ.get('DB_PASS')
-dbhost = os.environ.get('DB_HOST')
+dbname = os.environ.get('DBASE_NAME')
+dbuser = os.environ.get('DBASE_USER')
+dbpass = os.environ.get('DBASE_PASS')
+dbhost = os.environ.get('DBASE_HOST')
+dbport = os.environ.get('DBASE_PORT')
 
 db_url = "dbname={} user={} password={} host={} port=5432".format(dbname, dbuser, dbpass, dbhost)
 app = Flask(__name__)
