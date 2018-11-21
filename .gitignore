@@ -1,9 +1,9 @@
 .idea/
 __pycache__/
-app.pyc
 *.pyc
 articles/
 *~
+.vscode/
 
 
 

@@ -1,35 +1,40 @@
 from functools import wraps
 from flask import (Flask, flash, redirect, render_template, request,
                    session, url_for)
-from flask_mysqldb import MySQL
 from passlib.hash import sha256_crypt
 from wtforms import Form, PasswordField, StringField, TextAreaField, validators
+import psycopg2
+
+from .dbInit import Database, db_url
+from .models.users import User_Model
+from .models.articles import ArticleModel
 
 app = Flask(__name__)
-
-# Config mysql
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'adminray'
-app.config['MYSQL_DB'] = 'myflaskapp'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-
-# Init MYSQL
-mysql = MySQL(app)
+db = Database(db_url)
+conn = db.create_connection()
+cur = conn.cursor()
 
 
 @app.route('/')
 def index():
-    cur = mysql.connection.cursor()
+    conn
+    cur = conn.cursor()
+    try:
+        article = ArticleModel()
+        articles = article.get()
+    except psycopg2.ProgrammingError as exc:
+        print(exc)
+        conn.rollback()
+    except psycopg2.InterfaceError as exc:
+        print(exc)
+        conn
 
-    cur.execute("SELECT * FROM articles")
-
-    articles = cur.fetchall()
-
-    cur.close()
-
-    return render_template('index.html', articles=articles)
-
+    conn
+    cur = conn.cursor()
+    if articles:
+        return render_template('index.html', articles=articles)
+    else:
+        return render_template('index.html')
 
 @app.route('/about')
 def about():
@@ -38,15 +43,17 @@ def about():
 
 @app.route('/articles')
 def articles():
-    cur = mysql.connection.cursor()
+    try:
+        article = ArticleModel()
+        articles = article.get()
+    except psycopg2.ProgrammingError as exc:
+        print(exc)
+        conn.rollback()
+    except psycopg2.InterfaceError as exc:
+        print(exc)
+        conn
 
-    result = cur.execute("SELECT * FROM articles")
-
-    articles = cur.fetchall()
-
-    cur.close()
-
-    if result > 0:
+    if articles:
         return render_template('articles.html', articles=articles)
     else:
         msg = 'No article found, please add article to view them here'
@@ -55,14 +62,9 @@ def articles():
 
 @app.route('/article/<string:id>/', methods=['GET'])
 def article(id):
-    cur = mysql.connection.cursor()
-
     cur.execute("SELECT * FROM articles WHERE id ={}".format(id))
 
     article = cur.fetchone()
-
-    cur.close()
-
     return render_template('article.html', article=article)
 
 
@@ -81,31 +83,40 @@ class RegisterForm(Form):
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
-        name = form.name.data
-        email = form.email.data
-        username = form.username.data
-        password = sha256_crypt.encrypt(str(form.password.data))
-
-        # Create cursor
-        cur = mysql.connection.cursor()
+        name = str(form.name.data)
+        email = str(form.email.data)
+        username = str(form.username.data)
+        password = str(sha256_crypt.encrypt(str(form.password.data)))
 
         cur.execute(
-            "INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)",
-            (name,
-             email,
-             username,
-             password))
+                """SELECT * FROM users WHERE username = %s""", (username,))
+        data = cur.fetchone()
 
-        # Commit to DB
-        mysql.connection.commit()
+        if data:
+            flash("user {} already exists ".format(username), 'error')
+            conn.close()
+            return(redirect(url_for('register')))
+        else:
+            try:
+                conn
+                user = User_Model()
+                user.post(name, email, username, password)
+                user.save()
+                users = user.get()
+                print(users)
+            except psycopg2.ProgrammingError as exc:
+                print(exc)
+                conn.rollback()
+            except psycopg2.InterfaceError as exc:
+                print(exc)
+                conn
 
-        # Close Connection
-        cur.close()
+            # Commit to DB
+            conn.commit()
 
-        flash('You are now registered and can log in', 'success')
-
-        return redirect(url_for('index'))
-
+            flash('{} You are now registered and can log in'.format(username), 'success')
+            conn.close()
+            return redirect(url_for('index'))
     return render_template('register.html', form=form)
 
 
@@ -117,21 +128,29 @@ def login():
         username = request.form['username']
         password_candidate = request.form['password']
 
-        # Create cursor
-        cur = mysql.connection.cursor()
-
         # Get user by username
-        result = cur.execute(
-            "SELECT * FROM users WHERE username = %s",
-            [username])
-
-        if result > 0:
-            # Get stored hash
+        try:
+            conn
+            cur.execute(
+                """SELECT * FROM users WHERE username=%s""", (username,))
+        except psycopg2.ProgrammingError as exc:
+            print(exc)
+            conn.rollback()
+            conn
+            cur.execute(
+                """SELECT * FROM users WHERE username = %s""", (username,))
+        except psycopg2.InterfaceError as exc:
+            print(exc)
+        finally:
+            cur.execute(
+                """SELECT * FROM users WHERE username = %s""", (username,))
             data = cur.fetchone()
-            password = data['password']
+
+        if data != None:
+            # Get stored hash
+            password = data[4]
 
             # Compare Passwords
-            cur.close()
             if sha256_crypt.verify(password_candidate, password):
                 # Password and username matches
                 session['logged_in'] = True
@@ -147,8 +166,8 @@ def login():
         else:
             error = "Username not found"
             return render_template('login.html', error=error)
-
-    return render_template('login.html')
+    else:
+        return render_template('login.html')
 
 
 # Check for user logged in
@@ -176,15 +195,9 @@ def logout():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
-    cur = mysql.connection.cursor()
-
-    result = cur.execute("SELECT * FROM articles")
-
-    articles = cur.fetchall()
-
-    cur.close()
-
-    if result > 0:
+    article = ArticleModel()
+    articles = article.get()
+    if articles:
         return render_template('dashboard.html', articles=articles)
     else:
         msg = 'No article found, please add article to view them here'
@@ -206,19 +219,22 @@ def add_article():
         body = form.body.data
 
         # Create cursor
-        cursor = mysql.connection.cursor()
-
-        cursor.execute(
-            "INSERT INTO articles(title, author, body) VALUES(%s, %s, %s);",
-            (title,
-             session['username'],
-             body))
+        try:
+            cur.execute(
+                "INSERT INTO articles(title, author, body) VALUES(%s, %s, %s);",
+                (title,
+                 session['username'],
+                 body,))
+            conn.commit()
+        except psycopg2.OperationlError as exc:
+            print(exc)
+            conn.rollback()
+        except psycopg2.InterfaceError as exc:
+            print(exc)
+            conn
 
         # Commit to DB
-        mysql.connection.commit()
-
-        # close connection
-        cursor.close()
+        conn.commit()
 
         flash('Article Created successfully', 'success')
         return redirect(url_for('dashboard'))
@@ -229,8 +245,6 @@ def add_article():
 @app.route('/edit_article/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_article(id):
-    cur = mysql.connection.cursor()
-
     cur.execute("SELECT * FROM articles WHERE id = {}".format(id))
 
     article = cur.fetchone()
@@ -244,18 +258,19 @@ def edit_article(id):
         title = request.form['title']
         body = request.form['body']
 
-        # Create cursor
-        cursor = mysql.connection.cursor()
-
-        cursor.execute(
-            "UPDATE articles SET title={}, body={} WHERE id={}".format(
-                title, body, id))
+        try:
+            cur.execute(
+                "UPDATE articles SET title={}, body={} WHERE id={}".format(
+                    title, body, id))
+        except psycopg2.OperationlError as exc:
+            print(exc)
+            conn.rollback()
+        except psycopg2.InterfaceError as exc:
+            print(exc)
+            conn
 
         # Commit to DB
-        mysql.connection.commit()
-
-        # close connection
-        cursor.close()
+        conn.commit()
 
         flash('Article Updated successfully', 'success')
         return redirect(url_for('dashboard'))
@@ -266,15 +281,18 @@ def edit_article(id):
 @app.route('/delete_article', methods=['POST'])
 @is_logged_in
 def delete_article(id):
-    cur = mysql.connection.cursor()
+    try:
+        cur.execute("DELETE FROM articles WHERE id = {}".format(id))
+    except psycopg2.OperationlError as exc:
+        print(exc)
+        conn.rollback()
+        conn
+        cur
 
-    cur.execute("DELETE FROM articles WHERE id = {}".format(id))
+    conn.commit()
 
-    mysql.connection.commit()
-
-    cur.close()
 
 
 if __name__ == '__main__':
     app.secret_key = 'secret_key_219641456885_krafty'
-    app.run(debug=True)
+    app.run(debug=False)

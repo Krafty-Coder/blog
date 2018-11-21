@@ -3,18 +3,18 @@
 {% block body %}
 
 <div class="wrap">
-  <h1>{{article.title}}</h1>
-  <small>Written by {{article.author}} on {{article.create_date}}</small>
+  <h1>{{article['title']}}</h1>
+  <small>Written by {{article['author']}} on {{article['create_date']}}</small>
   <div class="terms">
-    <p>{{article.body}}</p>
+    <p>{{article['body']}}</p>
   </div>
   <p class="bold-p">Do you agree to our Terms and Conditions? Click for magic </p>
   <div class="choices">
     <!-- AGREE -->
-    <input type="radio" name="chosen" value="agree" id="agree">
+    <!-- <input type="radio" name="chosen" value="agree" id="agree"> -->
     <label class="agree-btn" for="agree">LIKE</label>
     <!-- DECLINE -->
-    <input type="radio" name="chosen" value="not_agree" id="not_agree" checked>
+    <!-- <input type="radio" name="chosen" value="not_agree" id="not_agree" checked> -->
     <label class="not-agreeing" for="not_agree">COMMENT</label>
   </div>
 
