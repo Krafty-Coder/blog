@@ -1,5 +1,5 @@
 ### A Flask Blog application.
-[![Build Status](https://travis-ci.org/Krafty-Coder/blog.svg?branch=master)](https://travis-ci.org) ![Maintainability](https://api.codeclimate.com/v1/badges/314f0379f2a2fd2ee665/maintainability)](https://codeclimate.com/github/Krafty-Coder/blog/maintainability) [![Coverage Status](https://coveralls.io/repos/github/Krafty-Coder/blog/badge.svg?branch=develop)](https://coveralls.io/github/Krafty-Coder/blog?branch=develop)
+[![Build Status](https://travis-ci.org/Krafty-Coder/blog.svg?branch=master)](https://travis-ci.org)  ![Maintainability](https://api.codeclimate.com/v1/badges/314f0379f2a2fd2ee665/maintainability) [![Coverage Status](https://coveralls.io/repos/github/Krafty-Coder/blog/badge.svg?branch=develop)](https://coveralls.io/github/Krafty-Coder/blog?branch=develop)
 
 _Users_ can edit and create posts, keep track of posts, but comments are implemented for now
 
