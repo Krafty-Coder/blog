@@ -1,7 +1,9 @@
 .idea/
-__pycache__/
+*__pycache__/
 *.pyc
-articles/
+.pytest_cache/
+articles-env/
+.cache/
 *~
 .vscode/
 
