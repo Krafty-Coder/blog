@@ -1,4 +1,5 @@
-# Test file
+import os
+import flask
 import unittest
 from passlib.hash import sha256_crypt
 import os
@@ -11,10 +12,11 @@ from flask import Flask
 from app.dbInit import Database
 
 
-dbname = os.environ.get('DB_NAME')
-dbuser = os.environ.get('DB_USER')
-dbpass = os.environ.get('DB_PASS')
-dbhost = os.environ.get('DB_HOST')
+dbname = os.environ.get('DBASE_NAME')
+dbuser = os.environ.get('DBASE_USER')
+dbpass = os.environ.get('DBASE_PASS')
+dbhost = os.environ.get('DBASE_HOST')
+dbport = os.environ.get('DBASE_PORT')
 
 db_url = "dbname={} user={} password={} host={} port=5432".format(dbname, dbuser, dbpass, dbhost)
 app = Flask(__name__)
@@ -93,7 +95,6 @@ class FlaskTestAppCases(unittest.TestCase):
             follow_redirects=True
         )
         self.assertIn(b'Welcome admin', response.data)
-
 
 if __name__ == '__main__':
     unittest.main()

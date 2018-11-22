@@ -16,7 +16,7 @@ p {
   font-size: 1.2em;
 }
 
-a {
+a {https://realpython.com/python-memory-management/#cpythons-memory-management
   text-decoration: none;
 }
 
@@ -132,6 +132,7 @@ p {
   background-color: rgba(0, 0, 0, 0.9);
 }
 
+
 /*
 This is the styling for articles.css
 */
@@ -162,6 +163,7 @@ a {
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 1rem;
   padding: 1em 1.3em;
+
   margin: 0 auto;
   width: max-content;
 }
@@ -221,7 +223,6 @@ a {
 .card:hover p {
   background: var(--color);
 }
-
 .card:hover .tags .tag {
   background: var(--color);
   color: white;
