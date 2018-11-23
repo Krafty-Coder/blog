@@ -20,7 +20,7 @@ div p {
   cursor: default;
   text-align: center;
 }
-.container-max a {
+.container-max#social a {
   display: inline-flex;
   cursor: pointer;
   width: 2em;
