@@ -54,7 +54,7 @@ a &:hover {
 .socialDark#social {
   color: #888;
 }
-.socialDark.codewars a {
+.codewars {
   width: 100%;
 }
 a {
